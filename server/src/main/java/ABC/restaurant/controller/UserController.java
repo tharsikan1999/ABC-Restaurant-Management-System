@@ -1,5 +1,6 @@
 package ABC.restaurant.controller;
 
+import ABC.restaurant.Response.LoginResponse;
 import ABC.restaurant.dto.UserDto;
 import ABC.restaurant.dto.UserLoginDto;
 import ABC.restaurant.exception.UserNotFoundException;
@@ -25,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@Valid @RequestBody UserLoginDto userLoginDto) throws UserNotFoundException {
+    public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody UserLoginDto userLoginDto) throws UserNotFoundException {
         return new ResponseEntity<>(userService.loginUser(userLoginDto), HttpStatus.OK);
     }
 }
