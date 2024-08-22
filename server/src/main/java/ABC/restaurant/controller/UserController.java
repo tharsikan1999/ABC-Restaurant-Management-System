@@ -5,6 +5,7 @@ import ABC.restaurant.dto.UserDto;
 import ABC.restaurant.dto.UserLoginDto;
 import ABC.restaurant.exception.UserNotFoundException;
 import ABC.restaurant.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody UserLoginDto userLoginDto) throws UserNotFoundException {
-        return new ResponseEntity<>(userService.loginUser(userLoginDto), HttpStatus.OK);
+    public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody UserLoginDto userLoginDto, HttpServletResponse response) throws UserNotFoundException {
+        // Pass the HttpServletResponse to the service method
+        LoginResponse loginResponse = userService.loginUser(userLoginDto, response);
+        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
     }
 }
