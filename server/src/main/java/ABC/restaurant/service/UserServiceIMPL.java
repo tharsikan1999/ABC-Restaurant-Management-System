@@ -1,5 +1,6 @@
 package ABC.restaurant.service;
 
+import ABC.restaurant.Response.LoginResponse;
 import ABC.restaurant.dto.UserLoginDto;
 import ABC.restaurant.exception.InvalidCredentialsException;
 import ABC.restaurant.exception.UserNotFoundException;
@@ -19,6 +20,7 @@ public class UserServiceIMPL implements UserService {
 
     @Autowired
     private JwtService jwtService;
+    
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -44,7 +46,7 @@ public class UserServiceIMPL implements UserService {
     }
 
     @Override
-    public String loginUser(UserLoginDto userLoginDto) throws UserNotFoundException {
+    public LoginResponse loginUser(UserLoginDto userLoginDto) throws UserNotFoundException {
         Optional<UserEntity> existingUser = userRepo.findByEmail(userLoginDto.getEmail());
         if (existingUser.isEmpty()) {
             throw new UserNotFoundException("User not found");
@@ -57,6 +59,6 @@ public class UserServiceIMPL implements UserService {
 
         String token = jwtService.generateToken(user.getName(), user.getEmail(), user.getRole());
 
-        return "Login Successful";
+         return LoginResponse.build("Login Successful", token);
     }
 }
