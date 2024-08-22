@@ -1,6 +1,8 @@
 package ABC.restaurant.controller;
 
 import ABC.restaurant.dto.UserDto;
+import ABC.restaurant.dto.UserLoginDto;
+import ABC.restaurant.exception.UserNotFoundException;
 import ABC.restaurant.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +14,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/register/user")
-    public ResponseEntity<String> addUser(@Valid @RequestBody UserDto userDto){
-        return new ResponseEntity(userService.addUser(userDto), HttpStatus.CREATED);
+    @PostMapping("/register")
+    public ResponseEntity<String> addUser(@Valid @RequestBody UserDto userDto) {
+        return new ResponseEntity<>(userService.addUser(userDto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(@Valid @RequestBody UserLoginDto userLoginDto) throws UserNotFoundException {
+        return new ResponseEntity<>(userService.loginUser(userLoginDto), HttpStatus.OK);
     }
 }
