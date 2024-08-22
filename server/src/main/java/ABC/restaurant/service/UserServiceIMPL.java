@@ -71,4 +71,14 @@ public class UserServiceIMPL implements UserService {
 
         return LoginResponse.build("Login Successful", accessToken);
     }
+
+    @Override
+    public void logoutUser(HttpServletResponse response) {
+        Cookie refreshTokenCookie = new Cookie("authToken", "");
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setMaxAge(0);
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setSecure(false);
+        response.addCookie(refreshTokenCookie);
+    }
 }

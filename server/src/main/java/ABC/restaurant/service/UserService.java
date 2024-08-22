@@ -10,4 +10,7 @@ import jakarta.validation.Valid;
 public interface UserService {
     String addUser(UserDto userDto);
 
-    LoginResponse loginUser(UserLoginDto userLoginDto, HttpServletResponse response) throws UserNotFoundException;}
+    LoginResponse loginUser(UserLoginDto userLoginDto, HttpServletResponse response) throws UserNotFoundException;
+
+    void logoutUser(HttpServletResponse response);
+}
