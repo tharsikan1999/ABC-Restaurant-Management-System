@@ -19,8 +19,9 @@ public class UserEntity {
 
 
     @Column(name = "name", nullable = false)
-    @NotNull(message = "Name cannot be null or empty")
+
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
+    @NotNull (message = "Name cannot be null or empty")
     private String name;
 
     @Column(name = "email", nullable = false, unique = true)
