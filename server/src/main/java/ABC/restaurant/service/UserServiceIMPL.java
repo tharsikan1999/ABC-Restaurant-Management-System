@@ -7,6 +7,8 @@ import ABC.restaurant.exception.UserNotFoundException;
 import ABC.restaurant.dto.UserDto;
 import ABC.restaurant.entity.UserEntity;
 import ABC.restaurant.repo.UserRepo;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,7 +22,7 @@ public class UserServiceIMPL implements UserService {
 
     @Autowired
     private JwtService jwtService;
-    
+
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -46,7 +48,7 @@ public class UserServiceIMPL implements UserService {
     }
 
     @Override
-    public LoginResponse loginUser(UserLoginDto userLoginDto) throws UserNotFoundException {
+    public  LoginResponse loginUser(UserLoginDto userLoginDto, HttpServletResponse response) throws UserNotFoundException {
         Optional<UserEntity> existingUser = userRepo.findByEmail(userLoginDto.getEmail());
         if (existingUser.isEmpty()) {
             throw new UserNotFoundException("User not found");
@@ -57,8 +59,26 @@ public class UserServiceIMPL implements UserService {
             throw new InvalidCredentialsException();
         }
 
-        String token = jwtService.generateToken(user.getName(), user.getEmail(), user.getRole());
+        String accessToken = jwtService.generateAccessToken(user.getName(), user.getEmail(), user.getRole(), user.getId());
+        String refreshToken = jwtService.generateRefreshToken(user.getName(), user.getEmail(), user.getRole(), user.getId());
 
-         return LoginResponse.build("Login Successful", token);
+        Cookie refreshTokenCookie = new Cookie("authToken", refreshToken);
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60);  // 7 days expiration
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setSecure(false);
+        response.addCookie(refreshTokenCookie);
+
+        return LoginResponse.build("Login Successful", accessToken);
+    }
+
+    @Override
+    public void logoutUser(HttpServletResponse response) {
+        Cookie refreshTokenCookie = new Cookie("authToken", "");
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setMaxAge(0);
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setSecure(false);
+        response.addCookie(refreshTokenCookie);
     }
 }
