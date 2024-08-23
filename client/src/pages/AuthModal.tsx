@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Login from "../../components/Login";
-import Register from "../../components/Register";
+import Login from "../components/Login";
+import Register from "../components/Register";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -15,7 +15,7 @@ function AuthModal({ isOpen, setIsOpen }: AuthModalProps) {
   return (
     <div 
       onClick={() => setIsOpen(false)} 
-      className="absolute top-0 left-0 w-full h-full bg-slate-600 bg-opacity-70 flex items-center justify-center"
+      className="absolute top-0 left-0 w-full z-20 h-full bg-slate-600 bg-opacity-70 flex items-center justify-center"
     >
       <div onClick={(e) => e.stopPropagation()} className=" p-6 rounded-md">
         {isLogin ? (
