@@ -35,8 +35,14 @@ const Contact = (
       onClick={() => setIsOpen(false)} 
       className="absolute top-0 left-0 z-20 w-full h-full bg-slate-600 bg-opacity-70 flex items-center justify-center"
     >
-    <form onSubmit={handleSubmit(onSubmit)} onClick={(e) => e.stopPropagation()} className=" bg-[#1F2937] bg-opacity-50 rounded-lg w-full shadow dark:border md:mt-0 sm:max-w-xl dark:bg-gray-800 dark:border-gray-700 px-5 py-14" >
-      <div className="grid grid-cols-12 gap-3">
+      
+    <form onSubmit={handleSubmit(onSubmit)} onClick={(e) => e.stopPropagation()} className=" bg-[#1F2937] bg-opacity-50 rounded-lg w-full shadow dark:border md:mt-0 sm:max-w-xl dark:bg-gray-800 dark:border-gray-700 px-5 pb-10 pt-7" >
+    <Fade direction="up" triggerOnce>
+                 <h1 className="text-xl -mt-2 text-center font-bold leading-tight tracking-tight text-gray-200 md:text-2xl dark:text-gray-200">
+                    Contact Us
+                 </h1>
+               </Fade>
+      <div className="grid grid-cols-12 gap-3 pt-7">
         <div className="col-span-12 md:col-span-6">
           <Fade triggerOnce direction="up">
             <div>

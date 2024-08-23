@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Login from "../components/Login";
-import Register from "../components/Register";
+import Login from "../components/form/Login";
+import Register from "../components/form/Register";
 
 interface AuthModalProps {
   isOpen: boolean;
