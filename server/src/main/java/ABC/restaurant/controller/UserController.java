@@ -39,4 +39,6 @@ public class UserController {
         LogoutResponse logoutResponse = LogoutResponse.build("User logged out");
         return new ResponseEntity<>(logoutResponse, HttpStatus.OK);
     }
+
+
 }
