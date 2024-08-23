@@ -30,7 +30,7 @@ function OrderItem({ isOpen, setIsOpen }: LoginProps) {
   return isOpen ? (
     <div
       onClick={() => setIsOpen(false)}
-      className="absolute top-0 left-0 w-full z-20 h-full bg-slate-600 bg-opacity-70 flex items-center justify-center"
+      className="fixed top-0 left-0 w-full overflow-y-auto z-20 h-full bg-slate-600 bg-opacity-70 flex items-center justify-center"
     >
       <section
         onClick={(e) => e.stopPropagation()}

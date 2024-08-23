@@ -30,11 +30,11 @@ function AddItem({ isOpen, setIsOpen }: LoginProps) {
   return isOpen ? (
     <div
       onClick={() => setIsOpen(false)}
-      className="absolute top-0 left-0 w-full z-20 h-full bg-slate-600 bg-opacity-70 flex items-center justify-center"
+      className="fixed top-0 left-0 overflow-y-auto w-full z-20 max-h-[100dvh] h-full bg-slate-600 bg-opacity-70 flex items-center justify-center"
     >
       <section
         onClick={(e) => e.stopPropagation()}
-        className=" z-50 w-[700px] py-10 "
+        className="z-50 w-full sm:w-[700px] max-h-[90vh] py-10 overflow-y-auto"
       >
         <div className="flex flex-col items-center justify-center6 py-8 mx-auto  lg:py-0">
           <div className=" bg-[#1F2937] bg-opacity-50 rounded-lg w-full shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
