@@ -2,7 +2,11 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      maxWidth: {
+        'max1366': '1366px',
+      },
+    },
   },
   plugins: [],
 };

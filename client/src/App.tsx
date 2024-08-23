@@ -1,8 +1,15 @@
+import HomePge from "./pages/Home"
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
 function App() {
   return (
-    <>
-      <h1 className=" text-red-600">hello</h1>
-    </>
+   
+    <Router>
+      <Routes>
+        {/* Common routes for all users */}
+        <Route path="/" element={<HomePge />} />
+      </Routes>
+    </Router>
   );
 }
 
