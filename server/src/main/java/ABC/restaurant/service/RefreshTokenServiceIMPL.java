@@ -1,10 +1,11 @@
 package ABC.restaurant.service;
 
 import ABC.restaurant.entity.RefreshToken;
-import ABC.restaurant.entity.UserEntity;
 import ABC.restaurant.exception.InvalidTokenException;
 import ABC.restaurant.repo.RefreshTokenRepo;
 import ABC.restaurant.repo.UserRepo;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class RefreshTokenServiceIMPL implements RefreshTokenService {
 
     @Override
     @Transactional
-    public RefreshToken createRefreshToken(String userEmail, Long userId) {
+    public RefreshToken createRefreshToken(String userEmail, Long userId, HttpServletResponse response) {
 
         Optional<RefreshToken> existingToken = refreshTokenRepo.findByUserId(userId);
 
@@ -35,6 +36,16 @@ public class RefreshTokenServiceIMPL implements RefreshTokenService {
                 .expiryDate(Instant.now().plusMillis(10_000))
                 .user(userRepo.findByEmail(userEmail).orElseThrow(() -> new RuntimeException("User not found")))
                 .build();
+
+        String refreshTokenString = refreshToken.getToken();
+
+        Cookie cookie = new Cookie("authToken", refreshTokenString);
+        cookie.setHttpOnly(false);
+        cookie.setSecure(false);
+        cookie.setPath("/");
+        cookie.setMaxAge(30 * 24 * 60 * 7);
+
+        response.addCookie(cookie);
 
         return refreshTokenRepo.save(refreshToken);
     }

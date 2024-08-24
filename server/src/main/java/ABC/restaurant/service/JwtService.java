@@ -54,11 +54,12 @@ public class JwtService {
 
  */
 
-    public String generateAccessToken(String userName, String email, String role, Long id) {
+    public String generateAccessToken(String userName, String email, String role, Long id,String phone) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", email);
         claims.put("role", role);
         claims.put("id", id);
+        claims.put("phone", phone);
         return createToken(claims, userName);
     }
 

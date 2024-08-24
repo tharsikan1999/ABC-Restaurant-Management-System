@@ -65,8 +65,8 @@ public class UserServiceIMPL implements UserService {
             throw new InvalidCredentialsException();
         }
 
-        String accessToken = jwtService.generateAccessToken(user.getName(), user.getEmail(), user.getRole(), user.getId());
-        String refreshToken = refreshTokenService.createRefreshToken(user.getEmail(),user.getId()).getToken();
+        String accessToken = jwtService.generateAccessToken(user.getName(), user.getEmail(), user.getRole(), user.getId(),user.getPhone());
+        String refreshToken = refreshTokenService.createRefreshToken(user.getEmail(),user.getId(),response).getToken();
         return LoginResponse.build("Login Successful", accessToken,refreshToken);
     }
 

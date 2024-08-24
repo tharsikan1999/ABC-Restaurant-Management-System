@@ -6,6 +6,9 @@ import { LoginSchema } from "../../validation/LoginSchema";
 import Button from "../common/Button";
 import { Fade } from "react-awesome-reveal";
 import { toast } from "react-toastify";
+import { decodeToken } from "../../utils/JwtDecode";
+import UseAuthProvider from "../../Hooks/UseAuthProvider";
+import useUserStore from "../../store/userDetailsSlice";
 
 type FormFields = z.infer<typeof LoginSchema>;
 
@@ -16,8 +19,8 @@ interface LoginProps {
 
 function Login({ toggleMode, setIsOpen }: LoginProps) {
   axios.defaults.withCredentials = true;
-
-  axios.defaults.withCredentials = true;
+  const { setAuth } = UseAuthProvider();
+  const setCurrentUser = useUserStore((state) => state.setCurrentUser);
 
   const {
     register,
@@ -28,8 +31,6 @@ function Login({ toggleMode, setIsOpen }: LoginProps) {
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    console.log(data);
-
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/user/login`,
@@ -42,6 +43,24 @@ function Login({ toggleMode, setIsOpen }: LoginProps) {
       if (response.status === 200) {
         setIsOpen(false);
         toast.success("Login Successful");
+        const accessToken = response.data.accessToken;
+
+        const decodeJwt = decodeToken(accessToken);
+
+        setAuth({
+          role: decodeJwt.role,
+          accessToken: accessToken,
+          userId: decodeJwt.id,
+          email: decodeJwt.email,
+          userName: decodeJwt.sub,
+          phone: decodeJwt.phone,
+        });
+
+        setCurrentUser({
+          email: decodeJwt.email,
+          userName: decodeJwt.sub,
+          phone: decodeJwt.phone,
+        });
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
