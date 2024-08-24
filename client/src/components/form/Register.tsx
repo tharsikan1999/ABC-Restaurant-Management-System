@@ -11,9 +11,10 @@ type FormFields = z.infer<typeof RegisterSchema>;
 
 interface LoginProps {
   toggleMode: () => void;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
-function Register({ toggleMode }: LoginProps) {
+function Register({ toggleMode, setIsOpen }: LoginProps) {
   axios.defaults.withCredentials = true;
 
   const {
@@ -38,6 +39,7 @@ function Register({ toggleMode }: LoginProps) {
       );
 
       if (response.status === 201) {
+        setIsOpen(false);
         toast.success("User Creation successful");
       }
     } catch (error) {

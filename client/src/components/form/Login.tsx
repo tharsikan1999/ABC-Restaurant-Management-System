@@ -11,9 +11,10 @@ type FormFields = z.infer<typeof LoginSchema>;
 
 interface LoginProps {
   toggleMode: () => void;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
-function Login({ toggleMode }: LoginProps) {
+function Login({ toggleMode, setIsOpen }: LoginProps) {
   axios.defaults.withCredentials = true;
 
   axios.defaults.withCredentials = true;
@@ -28,6 +29,7 @@ function Login({ toggleMode }: LoginProps) {
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     console.log(data);
+
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/user/login`,
@@ -38,6 +40,7 @@ function Login({ toggleMode }: LoginProps) {
       );
 
       if (response.status === 200) {
+        setIsOpen(false);
         toast.success("Login Successful");
       }
     } catch (error) {

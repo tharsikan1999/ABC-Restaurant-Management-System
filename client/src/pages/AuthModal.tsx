@@ -19,9 +19,9 @@ function AuthModal({ isOpen, setIsOpen }: AuthModalProps) {
     >
       <div onClick={(e) => e.stopPropagation()} className=" p-6 rounded-md">
         {isLogin ? (
-          <Login toggleMode={() => setIsLogin(false)} />
+          <Login toggleMode={() => setIsLogin(false)} setIsOpen={setIsOpen} />
         ) : (
-          <Register toggleMode={() => setIsLogin(true)} />
+          <Register toggleMode={() => setIsLogin(true)} setIsOpen={setIsOpen} />
         )}
       </div>
     </div>
