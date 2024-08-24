@@ -25,11 +25,12 @@ const Dashboard = () => {
           >
             ABC Restaurant
           </p>
-          <div className=" h-full flex items-center space-x-5">
+          <div className="h-full flex items-center space-x-5">
             {auth.role === "ADMIN" ? (
               <Button text="Add User" onClick={() => setIsOpen(true)} />
             ) : null}
-            {auth.role === "ADMIN" ? (
+
+            {auth.role === "ADMIN" || auth.role === "STAFF" ? (
               <Button text="Add Item" onClick={() => setIsItemOpen(true)} />
             ) : null}
           </div>

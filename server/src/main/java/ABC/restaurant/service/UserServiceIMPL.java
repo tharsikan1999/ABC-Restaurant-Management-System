@@ -2,6 +2,7 @@ package ABC.restaurant.service;
 
 import ABC.restaurant.Response.LoginResponse;
 import ABC.restaurant.Response.RegisterResponse;
+import ABC.restaurant.dto.StaffDto;
 import ABC.restaurant.dto.UserLoginDto;
 import ABC.restaurant.exception.InvalidCredentialsException;
 import ABC.restaurant.exception.UserNotFoundException;
@@ -78,6 +79,28 @@ public class UserServiceIMPL implements UserService {
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setSecure(false);
         response.addCookie(refreshTokenCookie);
+    }
+
+    @Override
+    public RegisterResponse addStaff(UserDto userDto) {
+        Optional<UserEntity> existingUser = userRepo.findByEmail(userDto.getEmail());
+        if (existingUser.isPresent()) {
+            return  RegisterResponse.build("User already exists");
+        }
+
+        UserEntity user = UserEntity.build(
+                0L,
+                userDto.getName(),
+                userDto.getEmail(),
+                userDto.getPhone(),
+                passwordEncoder.encode(userDto.getPassword()),
+                "STAFF"
+        );
+
+        userRepo.save(user);
+
+
+        return RegisterResponse.build("User registered successfully");
     }
 
 

@@ -5,6 +5,7 @@ import ABC.restaurant.Response.LoginResponse;
 import ABC.restaurant.Response.LogoutResponse;
 import ABC.restaurant.Response.RegisterResponse;
 import ABC.restaurant.dto.RefreshTokenDto;
+import ABC.restaurant.dto.StaffDto;
 import ABC.restaurant.dto.UserDto;
 import ABC.restaurant.dto.UserLoginDto;
 import ABC.restaurant.entity.RefreshToken;
@@ -86,9 +87,16 @@ public class UserController {
         return ResponseEntity.ok(jwtResponse);
     }
 
+    @PostMapping("/addStaff")
+    public ResponseEntity<RegisterResponse> addStaff(@Valid @RequestBody UserDto userDto) {
+        RegisterResponse registerResponse = userService.addStaff(userDto);
 
+        if ("User already exists".equals(registerResponse.getMessage())) {
 
+            return new ResponseEntity<>(registerResponse, HttpStatus.CONFLICT);
+        }
 
-
+        return new ResponseEntity<>(registerResponse, HttpStatus.CREATED);
+    }
 
 }
