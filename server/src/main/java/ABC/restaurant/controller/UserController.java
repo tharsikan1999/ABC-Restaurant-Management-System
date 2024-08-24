@@ -3,6 +3,7 @@ package ABC.restaurant.controller;
 import ABC.restaurant.Response.JwtResponse;
 import ABC.restaurant.Response.LoginResponse;
 import ABC.restaurant.Response.LogoutResponse;
+import ABC.restaurant.Response.RegisterResponse;
 import ABC.restaurant.dto.RefreshTokenDto;
 import ABC.restaurant.dto.UserDto;
 import ABC.restaurant.dto.UserLoginDto;
@@ -34,9 +35,17 @@ public class UserController {
     RefreshTokenService refreshTokenService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> addUser(@Valid @RequestBody UserDto userDto) {
-        return new ResponseEntity<>(userService.addUser(userDto), HttpStatus.CREATED);
+    public ResponseEntity<RegisterResponse> addUser(@Valid @RequestBody UserDto userDto) {
+        RegisterResponse registerResponse = userService.addUser(userDto);
+
+        if ("User already exists".equals(registerResponse.getMessage())) {
+
+            return new ResponseEntity<>(registerResponse, HttpStatus.CONFLICT);
+        }
+
+        return new ResponseEntity<>(registerResponse, HttpStatus.CREATED);
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody UserLoginDto userLoginDto, HttpServletResponse response) throws UserNotFoundException {

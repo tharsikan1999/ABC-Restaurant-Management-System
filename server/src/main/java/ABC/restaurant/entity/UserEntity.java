@@ -29,7 +29,10 @@ public class UserEntity {
     @Email(message = "Email should be valid")
     private String email;
 
-
+    @Column(name = "phone", nullable = false)
+    @NotBlank(message = "Phone cannot be null or empty")
+    @Pattern(regexp = "\\d{10}", message = "Phone number must be 10 digits")
+    private String phone;
 
     @Column(name = "password", nullable = false)
     @NotNull(message = "Password cannot be null or empty")
