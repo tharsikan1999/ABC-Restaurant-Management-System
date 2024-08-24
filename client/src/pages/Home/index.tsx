@@ -15,6 +15,22 @@ import Mediterranean from "../../../public/Images/Mediterranean.jpg";
 import { useNavigate } from "react-router-dom";
 import OrderItem from "../../components/form/OrderItem";
 import UseAuthProvider from "../../Hooks//UseAuthProvider";
+import Cookies from "universal-cookie";
+import { toast } from "react-toastify";
+import axios from "axios";
+
+const pizzas = [
+  { name: "Margherita", price: 1200, image: PizzaImg },
+  { name: "Pepperoni", price: 1400, image: Pepperoni },
+  { name: "Hawaiian", price: 1500, image: Hawaiian },
+  { name: "Veggie", price: 1300, image: Veggie_piza },
+  { name: "BBQ Chicken", price: 1600, image: BBQ_Chicken },
+  { name: "Four Cheese", price: 1700, image: Four_Cheese },
+  { name: "Meat Lovers", price: 1800, image: Meat_Lovers },
+  { name: "Buffalo Chicken", price: 1650, image: Buffalo_Chicken },
+  { name: "Supreme", price: 1900, image: Supreme },
+  { name: "Mediterranean", price: 1900, image: Mediterranean },
+];
 
 const HomePge = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,19 +38,19 @@ const HomePge = () => {
   const [isOderOpen, setIsOrderOpen] = useState(false);
   const navigate = useNavigate();
   const { auth } = UseAuthProvider();
+  const cookies = new Cookies();
 
-  const pizzas = [
-    { name: "Margherita", price: 1200, image: PizzaImg },
-    { name: "Pepperoni", price: 1400, image: Pepperoni },
-    { name: "Hawaiian", price: 1500, image: Hawaiian },
-    { name: "Veggie", price: 1300, image: Veggie_piza },
-    { name: "BBQ Chicken", price: 1600, image: BBQ_Chicken },
-    { name: "Four Cheese", price: 1700, image: Four_Cheese },
-    { name: "Meat Lovers", price: 1800, image: Meat_Lovers },
-    { name: "Buffalo Chicken", price: 1650, image: Buffalo_Chicken },
-    { name: "Supreme", price: 1900, image: Supreme },
-    { name: "Mediterranean", price: 1900, image: Mediterranean },
-  ];
+  const handleLogout = async () => {
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/user/logout`, {});
+      localStorage.removeItem("user-storage");
+      cookies.remove("authToken");
+      toast.success("Logged Out Successfully");
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="w-full min-h-screen relative">
@@ -59,6 +75,9 @@ const HomePge = () => {
             <Button text="contact" onClick={() => setIsContactOpen(true)} />
             {auth.accessToken ? (
               <Button text="Dashboard" onClick={() => navigate("/dashboard")} />
+            ) : null}
+            {auth.accessToken ? (
+              <Button text="LogOut" onClick={handleLogout} />
             ) : null}
           </div>
         </div>

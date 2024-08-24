@@ -25,6 +25,7 @@ const PublicRoute: React.FC<PublicRouteProps> = ({ element }) => {
     const newToken = await refresh();
     if (newToken) {
       const decodeJwt = decodeToken(newToken);
+      console.log(decodeJwt);
       setAuth({
         ...auth,
         accessToken: newToken,
