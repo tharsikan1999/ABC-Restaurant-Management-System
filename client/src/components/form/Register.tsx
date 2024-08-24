@@ -5,6 +5,7 @@ import axios from "axios";
 import { RegisterSchema } from "../../validation/RegisterSchema";
 import Button from "../common/Button";
 import { Fade } from "react-awesome-reveal";
+import { toast } from "react-toastify";
 
 type FormFields = z.infer<typeof RegisterSchema>;
 
@@ -25,6 +26,32 @@ function Register({ toggleMode }: LoginProps) {
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     console.log(data);
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/user/register`,
+        {
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          password: data.password,
+        }
+      );
+
+      if (response.status === 201) {
+        toast.success("User Creation successful");
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        if (
+          error.response.status === 409 &&
+          error.response.data.message === "User already exists"
+        ) {
+          toast.error("Email is already created ");
+        }
+      } else {
+        toast.error("User Creation failed");
+      }
+    }
   };
   return (
     <section

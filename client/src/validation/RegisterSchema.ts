@@ -6,12 +6,8 @@ export const RegisterSchema = z
     email: z.string().email({ message: "Please enter a valid email address" }),
     phone: z
       .string()
-      .max(10, { message: "Phone Number must be 10 digits" })
-      .refine((val) => !isNaN(Number(val)), {
-        message: "Phone Number must be a number",
-      })
-      .transform((val) => Number(val))
-      .refine((val) => val > 0, { message: "Phone Number is required" }),
+      .length(10, { message: "Phone Number must be exactly 10 digits" })
+      .regex(/^\d+$/, { message: "Phone Number must be numeric" }),
     password: z
       .string()
       .regex(/[A-Z]/, {

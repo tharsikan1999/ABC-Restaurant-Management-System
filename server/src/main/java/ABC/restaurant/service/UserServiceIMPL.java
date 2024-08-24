@@ -1,6 +1,7 @@
 package ABC.restaurant.service;
 
 import ABC.restaurant.Response.LoginResponse;
+import ABC.restaurant.Response.RegisterResponse;
 import ABC.restaurant.dto.UserLoginDto;
 import ABC.restaurant.exception.InvalidCredentialsException;
 import ABC.restaurant.exception.UserNotFoundException;
@@ -31,24 +32,25 @@ public class UserServiceIMPL implements UserService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
-    public String addUser(UserDto userDto) {
+    public RegisterResponse addUser(UserDto userDto) {
 
         Optional<UserEntity> existingUser = userRepo.findByEmail(userDto.getEmail());
         if (existingUser.isPresent()) {
-            return  "User already exists";
+            return  RegisterResponse.build("User already exists");
         }
 
         UserEntity user = UserEntity.build(
                 0L,
                 userDto.getName(),
                 userDto.getEmail(),
+                userDto.getPhone(),
                 passwordEncoder.encode(userDto.getPassword()),
                 "USER"
         );
 
         userRepo.save(user);
 
-        return "User Added";
+        return RegisterResponse.build("User registered successfully");
     }
 
     @Override
