@@ -2,7 +2,6 @@ package ABC.restaurant.service;
 
 import ABC.restaurant.Response.LoginResponse;
 import ABC.restaurant.Response.RegisterResponse;
-import ABC.restaurant.dto.StaffDto;
 import ABC.restaurant.dto.UserDto;
 import ABC.restaurant.dto.UserLoginDto;
 import ABC.restaurant.exception.UserNotFoundException;
