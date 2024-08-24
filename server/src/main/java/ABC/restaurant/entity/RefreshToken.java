@@ -6,10 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.util.UriBuilder;
 
+import lombok.Builder;
+
+import java.time.Instant;
+
 @Entity
 @Table(name = "refresh_token")
 @Data
-@AllArgsConstructor(staticName = "build")
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class RefreshToken {
 
@@ -17,16 +22,15 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "token", nullable = false, unique = true)
+    @Column(name = "token", nullable = false)
     private String token;
 
     @Column(name = "expiry_date", nullable = false)
-    private Long expiryDate;
+    private Instant expiryDate;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId", referencedColumnName = "id")
     private UserEntity user;
 
-    public static UriBuilder builder() {
-    }
 }
+

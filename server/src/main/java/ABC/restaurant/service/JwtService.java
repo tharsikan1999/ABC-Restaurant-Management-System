@@ -63,20 +63,12 @@ public class JwtService {
     }
 
 
-    public String generateRefreshToken(String userName,String email,String role,Long id){
-        Map<String,Object> claims=new HashMap<>();
-        claims.put("email", email);
-        claims.put("role", role);
-        claims.put("id", id);
-        return createToken(claims,userName);
-    }
-
     private String createToken(Map<String, Object> claims, String userName) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*5)) // expires in 5 minutes
+                .setExpiration(new Date(System.currentTimeMillis()+1000*60*5))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 

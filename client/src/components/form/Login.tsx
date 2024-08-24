@@ -2,8 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import axios from "axios";
-import { LoginSchema } from "../validation/LoginSchema"
-import Button from "./common/Button";
+import { LoginSchema } from "../../validation/LoginSchema"
+import Button from "../common/Button";
 import { Fade } from "react-awesome-reveal";
 
 type FormFields = z.infer<typeof LoginSchema>;
