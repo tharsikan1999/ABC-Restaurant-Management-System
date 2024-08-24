@@ -33,7 +33,7 @@ public class RefreshTokenServiceIMPL implements RefreshTokenService {
 
         RefreshToken refreshToken = RefreshToken.builder()
                 .token(UUID.randomUUID().toString())
-                .expiryDate(Instant.now().plusMillis(10_000))
+                .expiryDate(Instant.now().plusSeconds(7 * 24 * 60 * 60)) // 7 days
                 .user(userRepo.findByEmail(userEmail).orElseThrow(() -> new RuntimeException("User not found")))
                 .build();
 
@@ -43,7 +43,7 @@ public class RefreshTokenServiceIMPL implements RefreshTokenService {
         cookie.setHttpOnly(false);
         cookie.setSecure(false);
         cookie.setPath("/");
-        cookie.setMaxAge(30 * 24 * 60 * 7);
+        cookie.setMaxAge(30 * 24 * 60 * 7); // 7 days
 
         response.addCookie(cookie);
 
