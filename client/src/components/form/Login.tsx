@@ -61,6 +61,8 @@ function Login({ toggleMode, setIsOpen }: LoginProps) {
           userName: decodeJwt.sub,
           phone: decodeJwt.phone,
         });
+
+        window.location.reload();
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {

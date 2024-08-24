@@ -52,6 +52,13 @@ const HomePge = () => {
     }
   };
 
+  const handleOrder = () => {
+    if (auth.accessToken) {
+      setIsOrderOpen(true);
+    } else {
+      setIsOpen(true);
+    }
+  };
   return (
     <div className="w-full min-h-screen relative">
       {auth.accessToken ? null : (
@@ -99,7 +106,7 @@ const HomePge = () => {
                 </p>
               </div>
               <div className="w-full flex justify-center mt-1">
-                <Button text="Order Now" onClick={() => setIsOrderOpen(true)} />
+                <Button text="Order Now" onClick={handleOrder} />
               </div>
             </div>
           ))}
