@@ -71,7 +71,8 @@ public class UserController {
                             userInfo.getName(),
                             userInfo.getEmail(),
                             userInfo.getRole(),
-                            userInfo.getId()
+                            userInfo.getId(),
+                            userInfo.getPhone()
                     );
 
                     return JwtResponse.builder()

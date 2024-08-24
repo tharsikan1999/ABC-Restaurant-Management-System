@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface RefreshTokenService {
 
-     RefreshToken createRefreshToken(String userEmail, Long userId);
+     RefreshToken createRefreshToken(String userEmail, Long userId,HttpServletResponse response);
 
      Optional<RefreshToken> findByToken(String token);
 
