@@ -5,11 +5,14 @@ import AddUser from "../components/form/AddUser";
 import AddItem from "../components/form/AddItem";
 import StaffTable from "../components/table/StaffsTable";
 import ItemsTable from "../components/table/ItemsTable";
+import UseAuthProvider from "../Hooks//UseAuthProvider";
+import OrderTable from "../components/table/OrderTable";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [isItemOpen, setIsItemOpen] = useState(false);
+  const { auth } = UseAuthProvider();
   return (
     <div className="w-full min-h-screen relative">
       <AddUser isOpen={isOpen} setIsOpen={setIsOpen} />
@@ -23,12 +26,33 @@ const Dashboard = () => {
             ABC Restaurant
           </p>
           <div className=" h-full flex items-center space-x-5">
-            <Button text="Add User" onClick={() => setIsOpen(true)} />
-            <Button text="Add Item" onClick={() => setIsItemOpen(true)} />
+            {auth.role === "admin" ? (
+              <Button text="Add User" onClick={() => setIsOpen(true)} />
+            ) : null}
+            {auth.role === "admin" ? (
+              <Button text="Add Item" onClick={() => setIsItemOpen(true)} />
+            ) : null}
           </div>
         </div>
-        <StaffTable />
-        <ItemsTable />
+        {auth.role === "ADMIN" ? (
+          <>
+            <StaffTable />
+            <ItemsTable />
+            <OrderTable />
+          </>
+        ) : null}
+
+        {auth.role === "STAFF" ? (
+          <>
+            <ItemsTable />
+          </>
+        ) : null}
+
+        {auth.role === "USER" ? (
+          <>
+            <OrderTable />
+          </>
+        ) : null}
       </div>
     </div>
   );
