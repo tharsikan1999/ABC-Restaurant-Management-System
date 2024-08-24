@@ -14,12 +14,14 @@ import Meat_Lovers from "../../../public/Images/Meat_Lovers.jpg";
 import Mediterranean from "../../../public/Images/Mediterranean.jpg";
 import { useNavigate } from "react-router-dom";
 import OrderItem from "../../components/form/OrderItem";
+import UseAuthProvider from "../../Hooks//UseAuthProvider";
 
 const HomePge = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [isOderOpen, setIsOrderOpen] = useState(false);
   const navigate = useNavigate();
+  const { auth } = UseAuthProvider();
 
   const pizzas = [
     { name: "Margherita", price: 1200, image: PizzaImg },
@@ -36,7 +38,9 @@ const HomePge = () => {
 
   return (
     <div className="w-full min-h-screen relative">
-      <AuthModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      {auth.accessToken ? null : (
+        <AuthModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      )}
       <Contact isOpen={isContactOpen} setIsOpen={setIsContactOpen} />
       <OrderItem isOpen={isOderOpen} setIsOpen={setIsOrderOpen} />
       <div className="max-w-max1366  mx-auto w-full flex  flex-col z">
@@ -49,9 +53,13 @@ const HomePge = () => {
           </p>
 
           <div className=" h-full flex items-center space-x-5">
-            <Button text="Login" onClick={() => setIsOpen(true)} />
+            {auth.accessToken ? null : (
+              <Button text="Login" onClick={() => setIsOpen(true)} />
+            )}
             <Button text="contact" onClick={() => setIsContactOpen(true)} />
-            <Button text="Dashboard" onClick={() => navigate("/dashboard")} />
+            {auth.accessToken ? (
+              <Button text="Dashboard" onClick={() => navigate("/dashboard")} />
+            ) : null}
           </div>
         </div>
         <div className=" grid  grid-cols-5 pt-10 gap-x-6 gap-y-8 z-10">
