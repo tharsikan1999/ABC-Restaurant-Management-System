@@ -23,6 +23,9 @@ public class UserServiceIMPL implements UserService {
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
+    private RefreshTokenService refreshTokenService;
+
 
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -61,16 +64,8 @@ public class UserServiceIMPL implements UserService {
         }
 
         String accessToken = jwtService.generateAccessToken(user.getName(), user.getEmail(), user.getRole(), user.getId());
-        String refreshToken = jwtService.generateRefreshToken(user.getName(), user.getEmail(), user.getRole(), user.getId());
-
-        Cookie refreshTokenCookie = new Cookie("authToken", refreshToken);
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60);  // 7 days expiration
-        refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setSecure(false);
-        response.addCookie(refreshTokenCookie);
-
-        return LoginResponse.build("Login Successful", accessToken);
+        String refreshToken = refreshTokenService.createRefreshToken(user.getEmail(),user.getId()).getToken();
+        return LoginResponse.build("Login Successful", accessToken,refreshToken);
     }
 
     @Override
