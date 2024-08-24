@@ -73,7 +73,7 @@ public class UserServiceIMPL implements UserService {
     @Override
     public void logoutUser(HttpServletResponse response) {
         Cookie refreshTokenCookie = new Cookie("authToken", "");
-        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setHttpOnly(false);
         refreshTokenCookie.setMaxAge(0);
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setSecure(false);

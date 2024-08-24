@@ -17,7 +17,7 @@ const Dashboard = () => {
     <div className="w-full min-h-screen relative">
       <AddUser isOpen={isOpen} setIsOpen={setIsOpen} />
       <AddItem isOpen={isItemOpen} setIsOpen={setIsItemOpen} />
-      <div className="max-w-max1366  mx-auto w-full flex  flex-col z">
+      <div className="max-w-max1366  mx-auto w-full flex  flex-col pb-20">
         <div className=" h-20 flex justify-between items-center">
           <p
             className=" text-slate-700 font-semibold text-2xl cursor-pointer"
@@ -26,10 +26,10 @@ const Dashboard = () => {
             ABC Restaurant
           </p>
           <div className=" h-full flex items-center space-x-5">
-            {auth.role === "admin" ? (
+            {auth.role === "ADMIN" ? (
               <Button text="Add User" onClick={() => setIsOpen(true)} />
             ) : null}
-            {auth.role === "admin" ? (
+            {auth.role === "ADMIN" ? (
               <Button text="Add Item" onClick={() => setIsItemOpen(true)} />
             ) : null}
           </div>
