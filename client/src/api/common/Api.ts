@@ -8,8 +8,6 @@ export const Logout = async (): Promise<void> => {
   try {
     const res = await axios.post(`${CommonBase_API_URL}/logout`);
 
-    console.log("res.status", res.status);
-
     if (res.status === 200) {
       toast.success("Logged out successfully");
     }

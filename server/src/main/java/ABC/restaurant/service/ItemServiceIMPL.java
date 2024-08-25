@@ -34,6 +34,9 @@ public class ItemServiceIMPL implements  ItemService{
         return RegisterResponse.build("Item added successfully");
     }
 
+    public List<ItemEntity> getAllItems() {
+        return  itemRepo.findAll();
+    }
 
 
 }

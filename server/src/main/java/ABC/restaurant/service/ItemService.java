@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface ItemService {
     RegisterResponse addItem(@Valid ItemDto itemDto);
+
+    List<ItemEntity> getAllItems();
 }

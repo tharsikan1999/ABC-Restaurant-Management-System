@@ -3,20 +3,14 @@ import Button from "../../components/common/Button";
 import AuthModal from "../AuthModal";
 import Contact from "../contact";
 import PizzaImg from "../../../public/Images/pizzaImg.jpg";
-import BBQ_Chicken from "../../../public/Images/BBQ_Chicken.jpg";
-import Four_Cheese from "../../../public/Images/Four_Cheese.webp";
-import Veggie_piza from "../../../public/Images/Veggie_piza.jpg";
-import Hawaiian from "../../../public/Images/Hawaiian.webp";
-import Pepperoni from "../../../public/Images/Pepperoni.jpg";
-import Supreme from "../../../public/Images/Supreme.jpg";
-import Buffalo_Chicken from "../../../public/Images/Buffalo_Chicken.jpg";
-import Meat_Lovers from "../../../public/Images/Meat_Lovers.jpg";
-import Mediterranean from "../../../public/Images/Mediterranean.jpg";
 import { useNavigate } from "react-router-dom";
 import OrderItem from "../../components/form/OrderItem";
 import UseAuthProvider from "../../Hooks//UseAuthProvider";
 import Cookies from "universal-cookie";
 import { useLogoutMutation } from "../../query/common/query";
+import Spinner from "../../animation/Spinner";
+import { FetchAllItemsData } from "../../api/item/Api";
+import { useQuery } from "@tanstack/react-query";
 
 interface Pizza {
   id: number;
@@ -24,19 +18,6 @@ interface Pizza {
   price: number;
   image: string;
 }
-
-const pizzas = [
-  { id: 1, name: "Margherita", price: 1200, image: PizzaImg },
-  { id: 2, name: "Pepperoni", price: 1400, image: Pepperoni },
-  { id: 3, name: "Hawaiian", price: 1500, image: Hawaiian },
-  { id: 4, name: "Veggie", price: 1300, image: Veggie_piza },
-  { id: 5, name: "BBQ Chicken", price: 1600, image: BBQ_Chicken },
-  { id: 6, name: "Four Cheese", price: 1700, image: Four_Cheese },
-  { id: 7, name: "Meat Lovers", price: 1800, image: Meat_Lovers },
-  { id: 8, name: "Buffalo Chicken", price: 1650, image: Buffalo_Chicken },
-  { id: 9, name: "Supreme", price: 1900, image: Supreme },
-  { id: 10, name: "Mediterranean", price: 1900, image: Mediterranean },
-];
 
 const HomePge = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,6 +27,16 @@ const HomePge = () => {
   const navigate = useNavigate();
   const { auth } = UseAuthProvider();
   const cookies = new Cookies();
+
+  const {
+    isLoading,
+    isError,
+    data: AllItemsData,
+    error,
+  } = useQuery({
+    queryKey: ["AllItemsData"],
+    queryFn: () => FetchAllItemsData(),
+  });
 
   const { mutateAsync: logout } = useLogoutMutation();
 
@@ -68,6 +59,11 @@ const HomePge = () => {
       setIsOpen(true);
     }
   };
+
+  if (isLoading) return <Spinner />;
+
+  if (isError) return `Error: ${error.message}`;
+
   return (
     <div className="w-full min-h-screen relative">
       {auth.accessToken ? null : (
@@ -98,7 +94,7 @@ const HomePge = () => {
           </div>
         </div>
         <div className=" grid  grid-cols-5 pt-10 gap-x-6 gap-y-8 z-10">
-          {pizzas.map(
+          {AllItemsData?.map(
             (pizza, index) => (
               console.log(pizza),
               (
@@ -106,7 +102,7 @@ const HomePge = () => {
                   <div
                     className="w-full rounded-md h-52 bg-cover bg-center bg-no-repeat"
                     style={{
-                      backgroundImage: `url(${pizza.image})`,
+                      backgroundImage: `url(${PizzaImg})`,
                     }}
                   />
                   <div className="w-full flex justify-between py-3 px-1">

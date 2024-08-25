@@ -3,11 +3,23 @@ import { toast } from "react-toastify";
 
 const CommonBase_API_URL = `${import.meta.env.VITE_API_URL}/order`;
 
-type Order = {
-  userId: number;
-  itemId: number;
+interface Item {
+  name: string;
+  price: number;
+}
+
+interface User {
+  name: string;
+  email: string;
+  phone: string;
+}
+
+interface Order {
+  item: Item;
   address: string;
-};
+  orderDate: string;
+  user: User;
+}
 
 interface OrderItemProps {
   order: Order;
@@ -31,5 +43,22 @@ export const OrderItem = async ({
   } catch (error) {
     toast.error("Order failed");
     console.log(error);
+  }
+};
+
+//get all Items data
+export const FetchAllOrderItemData = async (
+  axiosPrivate: AxiosInstance
+): Promise<Order[]> => {
+  try {
+    const res = await axiosPrivate.get(`${CommonBase_API_URL}/getAllOrders`);
+    return res.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error fetching get All Orders:", error.message);
+    } else {
+      console.error("Error fetching get All Orders:", error);
+    }
+    throw new Error("Failed to get data");
   }
 };
