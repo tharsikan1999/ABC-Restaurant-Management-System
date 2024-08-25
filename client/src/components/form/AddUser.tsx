@@ -5,6 +5,8 @@ import axios from "axios";
 import Button from ".././common/Button";
 import { Fade } from "react-awesome-reveal";
 import { AddUserSchema } from "../../validation/AddUserSchema";
+import { useAddStaffMutation } from "../../query/user/query";
+import useAxiosPrivate from "../../Hooks/UseAxiosPrivate";
 
 type FormFields = z.infer<typeof AddUserSchema>;
 
@@ -14,18 +16,32 @@ interface LoginProps {
 }
 
 function AddUser({ isOpen, setIsOpen }: LoginProps) {
+  const { mutateAsync: addStaff } = useAddStaffMutation();
+  const axiosPrivate = useAxiosPrivate();
   axios.defaults.withCredentials = true;
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<FormFields>({
     resolver: zodResolver(AddUserSchema),
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    console.log(data);
+    try {
+      await addStaff({
+        staff: data,
+        axiosPrivate,
+        reset: () => {
+          reset();
+        },
+        setIsOpen,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
   return isOpen ? (
     <div
@@ -107,6 +123,39 @@ function AddUser({ isOpen, setIsOpen }: LoginProps) {
                     {errors.email && (
                       <div className="text-red-500 mt-2 mb-5">
                         {errors.email.message}
+                      </div>
+                    )}
+                  </div>
+                </Fade>
+                <Fade direction="up" triggerOnce>
+                  <div>
+                    <label
+                      htmlFor="phone"
+                      className="block mb-2 text-[1rem] font-medium text-gray-200 dark:text-gray-200"
+                    >
+                      Your Phone Number
+                    </label>
+                    <input
+                      {...register("phone", {
+                        required: "Email address is required",
+                      })}
+                      type="text"
+                      name="phone"
+                      id="phone"
+                      className={`bg-gray-50 border border-gray-300 sm:text-sm outline-none rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200  ${
+                        errors.phone
+                          ? " text-red-500 placeholder-red-500"
+                          : "text-gray-900"
+                      }`}
+                      placeholder={
+                        errors.phone
+                          ? errors.phone.message
+                          : "Enter Phone Number"
+                      }
+                    />
+                    {errors.phone && (
+                      <div className="text-red-500 mt-2 mb-5">
+                        {errors.phone.message}
                       </div>
                     )}
                   </div>
