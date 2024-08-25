@@ -26,7 +26,7 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/user/login", "/user/register","/user/logout","/user/refreshToken","/user/addStaff").permitAll()
+                        .requestMatchers("/user/login", "/user/register","/user/logout","/user/refreshToken","/user/addStaff","/item/addItem","/order/placeOrder","/user/getStaff").permitAll()
                         .requestMatchers("/user/**").authenticated()
                 )
                 .sessionManagement(session -> session

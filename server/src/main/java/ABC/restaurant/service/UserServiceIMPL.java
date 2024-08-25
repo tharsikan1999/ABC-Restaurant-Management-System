@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.Optional;
+import java.util.Arrays;
+
 
 @Service
 public class UserServiceIMPL implements UserService {
@@ -102,6 +104,10 @@ public class UserServiceIMPL implements UserService {
         return RegisterResponse.build("User registered successfully");
     }
 
+    @Override
+    public Object getStaff() {
+        return userRepo.findAllByRoleIn(Arrays.asList("STAFF", "ADMIN"));
+    }
 
 
 }

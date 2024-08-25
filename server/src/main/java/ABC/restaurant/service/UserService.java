@@ -16,4 +16,6 @@ public interface UserService {
     void logoutUser(HttpServletResponse response);
 
     RegisterResponse addStaff(@Valid UserDto userDto);
+
+    Object getStaff();
 }
