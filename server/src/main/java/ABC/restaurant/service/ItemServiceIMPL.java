@@ -34,13 +34,6 @@ public class ItemServiceIMPL implements  ItemService{
         return RegisterResponse.build("Item added successfully");
     }
 
-    @Override
-    public Object getItems(Long userId) {
-        System.out.println("userId: "+userId);
-        List<ItemEntity> itemEntities = itemRepo.findByUser_Id(userId);
-        System.out.println("itemEntities: "+itemEntities);
-        return itemEntities;
-    }
 
 
 }

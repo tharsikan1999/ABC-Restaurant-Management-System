@@ -37,8 +37,8 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/user/login", "/user/register", "/user/logout", "/user/refreshToken", "/user/addStaff", "/item/addItem", "/order/placeOrder", "/item/getItems/{userId}").permitAll()
-                        .requestMatchers("/user/**").authenticated()
+                        .requestMatchers("/user/login", "/user/register", "/user/logout", "/user/refreshToken").permitAll()
+                        .requestMatchers("/user/**","/item/**","/order/**").authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

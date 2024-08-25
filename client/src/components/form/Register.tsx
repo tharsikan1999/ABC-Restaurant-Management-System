@@ -40,6 +40,7 @@ function Register({ toggleMode, setIsOpen }: LoginProps) {
       if (response.status === 201) {
         setIsOpen(false);
         toast.success("User Creation successful");
+        window.location.reload();
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {

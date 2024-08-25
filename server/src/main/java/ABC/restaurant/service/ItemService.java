@@ -9,6 +9,4 @@ import java.util.List;
 
 public interface ItemService {
     RegisterResponse addItem(@Valid ItemDto itemDto);
-
-    Object getItems(Long userId);
 }

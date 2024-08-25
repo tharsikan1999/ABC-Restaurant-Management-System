@@ -1,10 +1,13 @@
 import * as z from "zod";
 
-export const AddUserSchema = z.object({
+export const AddUserSchema = z
+  .object({
     name: z.string().min(1, { message: "Name is required" }).max(255),
-    email: z
+    email: z.string().email({ message: "Please enter a valid email address" }),
+    phone: z
       .string()
-        .email({ message: "Please enter a valid email address" }),
+      .length(10, { message: "Phone Number must be exactly 10 digits" })
+      .regex(/^\d+$/, { message: "Phone Number must be numeric" }),
     password: z
       .string()
       .regex(/[A-Z]/, {
