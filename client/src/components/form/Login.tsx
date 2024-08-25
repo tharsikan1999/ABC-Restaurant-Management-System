@@ -42,7 +42,7 @@ function Login({ toggleMode, setIsOpen }: LoginProps) {
 
       if (response.status === 200) {
         setIsOpen(false);
-        toast.success("Login Successful");
+        toast.success("Login successful");
         const accessToken = response.data.accessToken;
 
         const decodeJwt = decodeToken(accessToken);
@@ -52,17 +52,15 @@ function Login({ toggleMode, setIsOpen }: LoginProps) {
           accessToken: accessToken,
           userId: decodeJwt.id,
           email: decodeJwt.email,
-          userName: decodeJwt.sub,
+          userName: decodeJwt.name,
           phone: decodeJwt.phone,
         });
 
         setCurrentUser({
           email: decodeJwt.email,
-          userName: decodeJwt.sub,
+          userName: decodeJwt.name,
           phone: decodeJwt.phone,
         });
-
-        window.location.reload();
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {

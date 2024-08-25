@@ -46,6 +46,7 @@ const Dashboard = () => {
         {auth.role === "STAFF" ? (
           <>
             <ItemsTable />
+            <OrderTable />
           </>
         ) : null}
 

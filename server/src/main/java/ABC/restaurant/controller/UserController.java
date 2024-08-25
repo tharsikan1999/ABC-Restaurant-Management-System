@@ -85,6 +85,7 @@ public class UserController {
     }
 
     @PostMapping("/addStaff")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<RegisterResponse> addStaff(@Valid @RequestBody UserDto userDto) {
         RegisterResponse registerResponse = userService.addStaff(userDto);
 

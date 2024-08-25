@@ -16,8 +16,7 @@ import { useNavigate } from "react-router-dom";
 import OrderItem from "../../components/form/OrderItem";
 import UseAuthProvider from "../../Hooks//UseAuthProvider";
 import Cookies from "universal-cookie";
-import { toast } from "react-toastify";
-import axios from "axios";
+import { useLogoutMutation } from "../../query/common/query";
 
 const pizzas = [
   { name: "Margherita", price: 1200, image: PizzaImg },
@@ -40,12 +39,13 @@ const HomePge = () => {
   const { auth } = UseAuthProvider();
   const cookies = new Cookies();
 
+  const { mutateAsync: logout } = useLogoutMutation();
+
   const handleLogout = async () => {
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/user/logout`, {});
+      await logout();
       localStorage.removeItem("user-storage");
       cookies.remove("authToken");
-      toast.success("Logged Out Successfully");
       window.location.reload();
     } catch (error) {
       console.log(error);
