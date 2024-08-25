@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class OrderServiceIMPL implements OrderService{
@@ -38,5 +39,10 @@ public class OrderServiceIMPL implements OrderService{
         );
         orderRepo.save(orderEntity);
         return RegisterResponse.build("Order Placed successfully");
+    }
+
+    @Override
+    public List<OrderEntity> getAllOrders() {
+        return orderRepo.findAll();
     }
 }

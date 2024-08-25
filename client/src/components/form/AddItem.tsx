@@ -8,6 +8,8 @@ import { AddItemSchema } from "../../validation/AddItemSchema";
 import useAxiosPrivate from "../../Hooks/UseAxiosPrivate";
 import { useAddItemMutation } from "../../query/item/query";
 import UseAuthProvider from "../../Hooks/UseAuthProvider";
+import { FetchAllItemsData } from "../../api/item/Api";
+import { useQuery } from "@tanstack/react-query";
 
 type FormFields = z.infer<typeof AddItemSchema>;
 
@@ -31,6 +33,11 @@ function AddItem({ isOpen, setIsOpen }: LoginProps) {
     resolver: zodResolver(AddItemSchema),
   });
 
+  const { refetch } = useQuery({
+    queryKey: ["AllItemsData"],
+    queryFn: () => FetchAllItemsData(axiosPrivate),
+  });
+
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     const finalData = {
       ...data,
@@ -44,6 +51,7 @@ function AddItem({ isOpen, setIsOpen }: LoginProps) {
           reset();
         },
         setIsOpen,
+        refetch,
       });
     } catch (error) {
       console.log(error);

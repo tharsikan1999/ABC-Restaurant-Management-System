@@ -14,8 +14,6 @@ type FormFields = z.infer<typeof OrderItemSchema>;
 
 interface Pizza {
   name: string;
-  price: number;
-  image: string;
   id: number;
 }
 

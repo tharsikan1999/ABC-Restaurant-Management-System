@@ -30,6 +30,11 @@ public class ItemController {
         return new ResponseEntity<>(registerResponse, HttpStatus.CREATED);
     }
 
+    @GetMapping("/getAllItems")
+    public List<ItemEntity> getAllItems() {
+        System.out.println("Get all items" + itemService.getAllItems());
+        return itemService.getAllItems();
+    }
 
 
 }

@@ -1,5 +1,6 @@
 package ABC.restaurant.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,6 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     @Column(name = "name", nullable = false)
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
@@ -35,6 +35,7 @@ public class UserEntity {
 
     @Column(name = "password", nullable = false)
     @NotNull(message = "Password cannot be null or empty")
+    @JsonIgnore
     private String password;
 
     @Column(name = "role", nullable = false)

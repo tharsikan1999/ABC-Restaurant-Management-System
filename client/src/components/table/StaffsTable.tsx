@@ -16,8 +16,6 @@ const StaffTable = () => {
     queryFn: () => FetchAllStaffData(axiosPrivate),
   });
 
-  console.log(AllStaffData);
-
   if (isLoading) return <Spinner />;
 
   if (isError) return `Error: ${error.message}`;
