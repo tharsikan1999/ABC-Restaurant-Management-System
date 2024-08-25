@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -19,8 +20,8 @@ public class JwtService {
 
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
-/*
-    public String extractUsername(String token) {
+
+    public String extractUserEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -47,31 +48,31 @@ public class JwtService {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final String userEmail = extractUserEmail(token);
+        return (userEmail.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-
- */
 
     public String generateAccessToken(String userName, String email, String role, Long id,String phone) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("email", email);
+        claims.put("UserName", userName);
         claims.put("role", role);
         claims.put("id", id);
         claims.put("phone", phone);
-        return createToken(claims, userName);
+        claims.put("email", email);
+        return createToken(claims, email);
     }
 
 
-    private String createToken(Map<String, Object> claims, String userName) {
+    private String createToken(Map<String, Object> claims, String email) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(userName)
+                .setSubject(email)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()+1000*60*5)) // 5 minutes
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
+
 
     private Key getSignKey() {
         byte[] keyBytes= Decoders.BASE64.decode(SECRET);

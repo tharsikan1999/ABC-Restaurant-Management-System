@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c3aa4d0b-36e3-4d05-baba-9cf76bb86ea9" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/config/UserInfoUserDetails.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/config/UserInfoUserDetailsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/filter/JwtAuthFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/controller/ItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/controller/ItemController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/entity/ItemEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/entity/ItemEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/repo/ItemRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/repo/ItemRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/service/ItemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/service/ItemService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/service/ItemServiceIMPL.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/service/ItemServiceIMPL.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/service/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/ABC/restaurant/service/JwtService.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 7
+}]]></component>
+  <component name="ProjectId" id="2l8pcthi1Nkk4fgtN8ROTwVyFkl" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "dev",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.20224.419" />
+        <option value="bundled-js-predefined-d6986cc7102b-410509235cf1-JavaScript-IU-242.20224.419" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c3aa4d0b-36e3-4d05-baba-9cf76bb86ea9" name="Changes" comment="" />
+      <created>1724571642564</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1724571642564</updated>
+      <workItem from="1724571643747" duration="4000" />
+    </task>
+    <servers />
+  </component>
+</project>
