@@ -5,6 +5,9 @@ import axios from "axios";
 import Button from ".././common/Button";
 import { Fade } from "react-awesome-reveal";
 import { AddItemSchema } from "../../validation/AddItemSchema";
+import useAxiosPrivate from "../../Hooks/UseAxiosPrivate";
+import { useAddItemMutation } from "../../query/item/query";
+import UseAuthProvider from "../../Hooks/UseAuthProvider";
 
 type FormFields = z.infer<typeof AddItemSchema>;
 
@@ -14,18 +17,37 @@ interface LoginProps {
 }
 
 function AddItem({ isOpen, setIsOpen }: LoginProps) {
+  const { mutateAsync: addItem } = useAddItemMutation();
+  const { auth } = UseAuthProvider();
   axios.defaults.withCredentials = true;
+  const axiosPrivate = useAxiosPrivate();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<FormFields>({
     resolver: zodResolver(AddItemSchema),
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    console.log(data);
+    const finalData = {
+      ...data,
+      userId: auth.userId,
+    };
+    try {
+      await addItem({
+        item: finalData,
+        axiosPrivate,
+        reset: () => {
+          reset();
+        },
+        setIsOpen,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
   return isOpen ? (
     <div
@@ -107,6 +129,24 @@ function AddItem({ isOpen, setIsOpen }: LoginProps) {
                         {errors.price.message}
                       </div>
                     )}
+                  </div>
+                </Fade>
+
+                <Fade direction="up" triggerOnce>
+                  <div className="flex items-center">
+                    <input
+                      {...register("isAvailable")}
+                      type="checkbox"
+                      name="isAvailable"
+                      id="isAvailable"
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    />
+                    <label
+                      htmlFor="isAvailable"
+                      className="ml-2 text-sm font-medium text-gray-200 dark:text-gray-300"
+                    >
+                      Is Available
+                    </label>
                   </div>
                 </Fade>
 
