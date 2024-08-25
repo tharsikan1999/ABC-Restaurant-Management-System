@@ -1,19 +1,27 @@
-interface User {
-  name: string;
-  email: string;
-  role: string;
-}
-
-const sampleData = [
-  { name: "John Doe", email: "johndoe@example.com", role: "Admin" },
-  { name: "Jane Smith", email: "janesmith@example.com", role: "Staff" },
-  { name: "Michael Johnson", email: "michaelj@example.com", role: "Staff" },
-  { name: "Emily Davis", email: "emilydavis@example.com", role: "Staff" },
-  { name: "David Brown", email: "davidbrown@example.com", role: "Staff" },
-  { name: "Sarah Wilson", email: "sarahwilson@example.com", role: "Staff" },
-];
+import { useQuery } from "@tanstack/react-query";
+import { FetchAllStaffData } from "../../api/user/Api";
+import useAxiosPrivate from "../../Hooks/UseAxiosPrivate";
+import Spinner from "../../animation/Spinner";
 
 const StaffTable = () => {
+  const axiosPrivate = useAxiosPrivate();
+
+  const {
+    isLoading,
+    isError,
+    data: AllStaffData,
+    error,
+  } = useQuery({
+    queryKey: ["AllStudentData"],
+    queryFn: () => FetchAllStaffData(axiosPrivate),
+  });
+
+  console.log(AllStaffData);
+
+  if (isLoading) return <Spinner />;
+
+  if (isError) return `Error: ${error.message}`;
+
   return (
     <div className="">
       <p className=" font-bold text-2xl text-slate-600/70 text-center my-5">
@@ -38,14 +46,14 @@ const StaffTable = () => {
             </tr>
           </thead>
           <tbody>
-            {sampleData.length === 0 ? (
+            {AllStaffData?.length === 0 ? (
               <tr>
                 <td colSpan={9} className="text-center py-4">
                   No data found
                 </td>
               </tr>
             ) : (
-              sampleData.map((user: User, index: number) => (
+              AllStaffData?.map((user, index: number) => (
                 <tr
                   key={index}
                   className={`dark:bg-[#1E2021] whitespace-nowrap dark:text-gray-400  dark:hover:text-gray-800 hover:bg-gradient-to-r hover:from-blue-300 hover:via-blue-200 cursor-pointer hover:to-blue-300  hover:dark:bg-gradient-to-r hover:dark:from-gray-100 hover:dark:via-white hover:dark:to-gray-100 hover:dark:cursor-pointer transition-colors duration-200 text-[0.9rem] font-normal text-customGreen ${

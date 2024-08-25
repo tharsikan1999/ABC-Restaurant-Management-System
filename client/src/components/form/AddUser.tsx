@@ -7,6 +7,8 @@ import { Fade } from "react-awesome-reveal";
 import { AddUserSchema } from "../../validation/AddUserSchema";
 import { useAddStaffMutation } from "../../query/user/query";
 import useAxiosPrivate from "../../Hooks/UseAxiosPrivate";
+import { FetchAllStaffData } from "../../api/user/Api";
+import { useQuery } from "@tanstack/react-query";
 
 type FormFields = z.infer<typeof AddUserSchema>;
 
@@ -29,6 +31,11 @@ function AddUser({ isOpen, setIsOpen }: LoginProps) {
     resolver: zodResolver(AddUserSchema),
   });
 
+  const { refetch } = useQuery({
+    queryKey: ["AllStudentData"],
+    queryFn: () => FetchAllStaffData(axiosPrivate),
+  });
+
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       await addStaff({
@@ -38,6 +45,7 @@ function AddUser({ isOpen, setIsOpen }: LoginProps) {
           reset();
         },
         setIsOpen,
+        refetch,
       });
     } catch (error) {
       console.log(error);
