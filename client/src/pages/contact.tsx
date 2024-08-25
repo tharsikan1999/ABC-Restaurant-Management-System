@@ -6,6 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "../components/common/Button";
 import { ContactSchema } from "../validation/ContactSchema";
 import { Fade } from "react-awesome-reveal";
+import { useSendMailMutation } from "../query/email/query";
+import useAxiosPrivate from "../Hooks/UseAxiosPrivate";
 
 type FormValues = z.infer<typeof ContactSchema>;
 
@@ -15,16 +17,31 @@ interface ContactProps {
 }
 
 const Contact = ({ isOpen, setIsOpen }: ContactProps) => {
+  const { mutateAsync: sendEmail } = useSendMailMutation();
+  const axiosPrivate = useAxiosPrivate();
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<FormValues>({
     resolver: zodResolver(ContactSchema),
   });
 
   const onSubmit = async (data: FormValues) => {
-    console.log(data);
+    try {
+      await sendEmail({
+        contactInfo: data,
+        axiosPrivate,
+        reset: () => {
+          reset();
+        },
+        setIsOpen,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return isOpen ? (
