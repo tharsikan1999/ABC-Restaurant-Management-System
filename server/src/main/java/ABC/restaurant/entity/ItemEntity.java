@@ -29,7 +29,7 @@ public class ItemEntity {
     @Column(name = "isAvailable", nullable = false)
     private Boolean isAvailable;
 
-    // Many items belong to one user
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;

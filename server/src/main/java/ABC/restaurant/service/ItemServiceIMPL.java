@@ -9,6 +9,8 @@ import ABC.restaurant.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ItemServiceIMPL implements  ItemService{
     @Autowired
@@ -31,4 +33,14 @@ public class ItemServiceIMPL implements  ItemService{
         itemRepo.save(itemEntity);
         return RegisterResponse.build("Item added successfully");
     }
+
+    @Override
+    public Object getItems(Long userId) {
+        System.out.println("userId: "+userId);
+        List<ItemEntity> itemEntities = itemRepo.findByUser_Id(userId);
+        System.out.println("itemEntities: "+itemEntities);
+        return itemEntities;
+    }
+
+
 }
