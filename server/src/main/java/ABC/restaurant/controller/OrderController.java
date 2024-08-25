@@ -1,7 +1,6 @@
 package ABC.restaurant.controller;
 
 import ABC.restaurant.Response.RegisterResponse;
-import ABC.restaurant.dto.ItemDto;
 import ABC.restaurant.dto.OrderDto;
 import ABC.restaurant.service.OrderService;
 import jakarta.validation.Valid;

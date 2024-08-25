@@ -18,22 +18,30 @@ import UseAuthProvider from "../../Hooks//UseAuthProvider";
 import Cookies from "universal-cookie";
 import { useLogoutMutation } from "../../query/common/query";
 
+interface Pizza {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+}
+
 const pizzas = [
-  { name: "Margherita", price: 1200, image: PizzaImg },
-  { name: "Pepperoni", price: 1400, image: Pepperoni },
-  { name: "Hawaiian", price: 1500, image: Hawaiian },
-  { name: "Veggie", price: 1300, image: Veggie_piza },
-  { name: "BBQ Chicken", price: 1600, image: BBQ_Chicken },
-  { name: "Four Cheese", price: 1700, image: Four_Cheese },
-  { name: "Meat Lovers", price: 1800, image: Meat_Lovers },
-  { name: "Buffalo Chicken", price: 1650, image: Buffalo_Chicken },
-  { name: "Supreme", price: 1900, image: Supreme },
-  { name: "Mediterranean", price: 1900, image: Mediterranean },
+  { id: 1, name: "Margherita", price: 1200, image: PizzaImg },
+  { id: 2, name: "Pepperoni", price: 1400, image: Pepperoni },
+  { id: 3, name: "Hawaiian", price: 1500, image: Hawaiian },
+  { id: 4, name: "Veggie", price: 1300, image: Veggie_piza },
+  { id: 5, name: "BBQ Chicken", price: 1600, image: BBQ_Chicken },
+  { id: 6, name: "Four Cheese", price: 1700, image: Four_Cheese },
+  { id: 7, name: "Meat Lovers", price: 1800, image: Meat_Lovers },
+  { id: 8, name: "Buffalo Chicken", price: 1650, image: Buffalo_Chicken },
+  { id: 9, name: "Supreme", price: 1900, image: Supreme },
+  { id: 10, name: "Mediterranean", price: 1900, image: Mediterranean },
 ];
 
 const HomePge = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [pizza, setPizza] = useState<Pizza | null>(null);
   const [isOderOpen, setIsOrderOpen] = useState(false);
   const navigate = useNavigate();
   const { auth } = UseAuthProvider();
@@ -52,9 +60,10 @@ const HomePge = () => {
     }
   };
 
-  const handleOrder = () => {
+  const handleOrder = (pizza: Pizza) => {
     if (auth.accessToken) {
       setIsOrderOpen(true);
+      setPizza(pizza);
     } else {
       setIsOpen(true);
     }
@@ -65,7 +74,7 @@ const HomePge = () => {
         <AuthModal isOpen={isOpen} setIsOpen={setIsOpen} />
       )}
       <Contact isOpen={isContactOpen} setIsOpen={setIsContactOpen} />
-      <OrderItem isOpen={isOderOpen} setIsOpen={setIsOrderOpen} />
+      <OrderItem isOpen={isOderOpen} setIsOpen={setIsOrderOpen} pizza={pizza} />
       <div className="max-w-max1366  mx-auto w-full flex  flex-col z">
         <div className=" h-20 flex justify-between items-center">
           <p
@@ -89,27 +98,35 @@ const HomePge = () => {
           </div>
         </div>
         <div className=" grid  grid-cols-5 pt-10 gap-x-6 gap-y-8 z-10">
-          {pizzas.map((pizza, index) => (
-            <div key={index} className="">
-              <div
-                className="w-full rounded-md h-52 bg-cover bg-center bg-no-repeat"
-                style={{
-                  backgroundImage: `url(${pizza.image})`,
-                }}
-              />
-              <div className="w-full flex justify-between py-3 px-1">
-                <p className="font-semibold text-lg text-slate-800/90">
-                  {pizza.name}
-                </p>
-                <p className="font-semibold text-lg text-slate-600/90">
-                  RS. {pizza.price}
-                </p>
-              </div>
-              <div className="w-full flex justify-center mt-1">
-                <Button text="Order Now" onClick={handleOrder} />
-              </div>
-            </div>
-          ))}
+          {pizzas.map(
+            (pizza, index) => (
+              console.log(pizza),
+              (
+                <div key={index} className="">
+                  <div
+                    className="w-full rounded-md h-52 bg-cover bg-center bg-no-repeat"
+                    style={{
+                      backgroundImage: `url(${pizza.image})`,
+                    }}
+                  />
+                  <div className="w-full flex justify-between py-3 px-1">
+                    <p className="font-semibold text-lg text-slate-800/90">
+                      {pizza.name}
+                    </p>
+                    <p className="font-semibold text-lg text-slate-600/90">
+                      RS. {pizza.price}
+                    </p>
+                  </div>
+                  <div className="w-full flex justify-center mt-1">
+                    <Button
+                      text="Order Now"
+                      onClick={() => handleOrder(pizza)}
+                    />
+                  </div>
+                </div>
+              )
+            )
+          )}
         </div>
       </div>
     </div>

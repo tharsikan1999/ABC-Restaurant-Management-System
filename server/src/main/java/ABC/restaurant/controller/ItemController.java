@@ -31,8 +31,5 @@ public class ItemController {
     }
 
 
-    @GetMapping("/getItems/{userId}")
-    public ResponseEntity<?> getItems(@PathVariable Long userId) {
-        return ResponseEntity.ok(itemService.getItems(userId));
-    }
+
 }

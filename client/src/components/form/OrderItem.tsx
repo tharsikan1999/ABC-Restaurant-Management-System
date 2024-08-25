@@ -5,29 +5,62 @@ import axios from "axios";
 import Button from ".././common/Button";
 import { Fade } from "react-awesome-reveal";
 import { OrderItemSchema } from "../../validation/OrderItemSchema";
+import { useOrderItemMutation } from "../../query/order/query";
+import useAxiosPrivate from "../../Hooks/UseAxiosPrivate";
+import UseAuthProvider from "../../Hooks/UseAuthProvider";
+import useUserStore from "../../store/userDetailsSlice";
 
 type FormFields = z.infer<typeof OrderItemSchema>;
 
-interface LoginProps {
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
+interface Pizza {
+  name: string;
+  price: number;
+  image: string;
+  id: number;
 }
 
-function OrderItem({ isOpen, setIsOpen }: LoginProps) {
+interface OrderItemProps {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  pizza: Pizza | null;
+}
+
+function OrderItem({ isOpen, setIsOpen, pizza }: OrderItemProps) {
+  const { mutateAsync: orderItem } = useOrderItemMutation();
+  const axiosPrivate = useAxiosPrivate();
+  const { auth } = UseAuthProvider();
   axios.defaults.withCredentials = true;
+  const { currentUser } = useUserStore();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<FormFields>({
     resolver: zodResolver(OrderItemSchema),
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    console.log(data);
+    const finalData = {
+      userId: auth.userId,
+      itemId: pizza?.id ?? 0,
+      address: data.address,
+    };
+    try {
+      await orderItem({
+        order: finalData,
+        axiosPrivate,
+        reset: () => {
+          reset();
+        },
+        setIsOpen,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
-  return isOpen ? (
+  return isOpen && pizza ? (
     <div
       onClick={() => setIsOpen(false)}
       className="fixed top-0 left-0 w-full overflow-y-auto z-20 h-full bg-slate-600 bg-opacity-70 flex items-center justify-center"
@@ -45,7 +78,7 @@ function OrderItem({ isOpen, setIsOpen }: LoginProps) {
               <div className=" flex flex-col space-y-2">
                 <div className="flex gap-3 text-gray-200 text-lg">
                   <p className="font-extrabold">Your Item :</p>
-                  <p className=" font-semibold">Pepperoni</p>
+                  <p className=" font-semibold">{pizza.name}</p>
                 </div>
                 <div className="flex gap-3 text-gray-200 text-lg  font-extrabold">
                   <p className="font-extrabold">Payment Method :</p>
@@ -66,26 +99,13 @@ function OrderItem({ isOpen, setIsOpen }: LoginProps) {
                       Your Full Name
                     </label>
                     <input
-                      {...register("name")}
+                      value={currentUser?.userName}
                       type="text"
                       name="name"
                       id="name"
-                      className={`bg-gray-50 border border-gray-300 sm:text-sm outline-none rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white  ${
-                        errors.name
-                          ? " text-red-500 placeholder-red-500"
-                          : "text-gray-900"
-                      }`}
-                      placeholder={
-                        errors.name
-                          ? errors.name.message
-                          : "Enter Your Full Name"
-                      }
+                      className={`bg-gray-50 border border-gray-300 sm:text-sm outline-none rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white  text-gray-900`}
+                      placeholder="Enter Your Full Name"
                     />
-                    {errors.name && (
-                      <div className="text-red-500 mt-2 mb-5">
-                        {errors.name.message}
-                      </div>
-                    )}
                   </div>
                 </Fade>
                 <Fade direction="up" triggerOnce>
@@ -97,26 +117,13 @@ function OrderItem({ isOpen, setIsOpen }: LoginProps) {
                       Your Email Address
                     </label>
                     <input
-                      {...register("email", {
-                        required: "Email address is required",
-                      })}
                       type="text"
                       name="email"
+                      value={auth.email}
                       id="email"
-                      className={`bg-gray-50 border border-gray-300 sm:text-sm outline-none rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200  ${
-                        errors.email
-                          ? " text-red-500 placeholder-red-500"
-                          : "text-gray-900"
-                      }`}
-                      placeholder={
-                        errors.email ? errors.email.message : "Enter your email"
-                      }
+                      className={`bg-gray-50 border border-gray-300 sm:text-sm outline-none rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 text-gray-900`}
+                      placeholder="Enter your email"
                     />
-                    {errors.email && (
-                      <div className="text-red-500 mt-2 mb-5">
-                        {errors.email.message}
-                      </div>
-                    )}
                   </div>
                 </Fade>
                 <Fade direction="up" triggerOnce>
@@ -128,28 +135,13 @@ function OrderItem({ isOpen, setIsOpen }: LoginProps) {
                       Your Phone Number
                     </label>
                     <input
-                      {...register("phone", {
-                        required: "Email address is required",
-                      })}
+                      value={currentUser?.phone}
                       type="text"
                       name="phone"
                       id="phone"
-                      className={`bg-gray-50 border border-gray-300 sm:text-sm outline-none rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200  ${
-                        errors.phone
-                          ? " text-red-500 placeholder-red-500"
-                          : "text-gray-900"
-                      }`}
-                      placeholder={
-                        errors.phone
-                          ? errors.phone.message
-                          : "Enter Phone Number"
-                      }
+                      className={`bg-gray-50 border border-gray-300 sm:text-sm outline-none rounded-lg  block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 text-gray-900`}
+                      placeholder="Enter Phone Number"
                     />
-                    {errors.phone && (
-                      <div className="text-red-500 mt-2 mb-5">
-                        {errors.phone.message}
-                      </div>
-                    )}
                   </div>
                 </Fade>
 
