@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.Optional;
+import java.util.Arrays;
+
 
 @Service
 public class UserServiceIMPL implements UserService {
@@ -80,6 +82,32 @@ public class UserServiceIMPL implements UserService {
         response.addCookie(refreshTokenCookie);
     }
 
+    @Override
+    public RegisterResponse addStaff(UserDto userDto) {
+        Optional<UserEntity> existingUser = userRepo.findByEmail(userDto.getEmail());
+        if (existingUser.isPresent()) {
+            return  RegisterResponse.build("User already exists");
+        }
+
+        UserEntity user = UserEntity.build(
+                0L,
+                userDto.getName(),
+                userDto.getEmail(),
+                userDto.getPhone(),
+                passwordEncoder.encode(userDto.getPassword()),
+                "STAFF"
+        );
+
+        userRepo.save(user);
+
+
+        return RegisterResponse.build("User registered successfully");
+    }
+
+    @Override
+    public Object getStaff() {
+        return userRepo.findAllByRoleIn(Arrays.asList("STAFF", "ADMIN"));
+    }
 
 
 }
