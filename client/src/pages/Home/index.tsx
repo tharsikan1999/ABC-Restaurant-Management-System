@@ -18,6 +18,12 @@ interface Pizza {
   price: number;
   image: string;
 }
+interface Item {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+}
 
 const HomePge = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,10 +57,10 @@ const HomePge = () => {
     }
   };
 
-  const handleOrder = (pizza: Pizza) => {
+  const handleOrder = (pizza: Item) => {
     if (auth.accessToken) {
       setIsOrderOpen(true);
-      setPizza(pizza);
+      setPizza(pizza as Pizza);
     } else {
       setIsOpen(true);
     }
