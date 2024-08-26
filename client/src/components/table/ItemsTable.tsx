@@ -1,12 +1,9 @@
 import PizzaImg from "../../../public/Images/pizzaImg.jpg";
-import useAxiosPrivate from "../../Hooks/UseAxiosPrivate";
 import Spinner from "../../animation/Spinner";
 import { FetchAllItemsData } from "../../api/item/Api";
 import { useQuery } from "@tanstack/react-query";
 
 const ItemsTable = () => {
-  const axiosPrivate = useAxiosPrivate();
-
   const {
     isLoading,
     isError,
@@ -14,7 +11,7 @@ const ItemsTable = () => {
     error,
   } = useQuery({
     queryKey: ["AllItemsData"],
-    queryFn: () => FetchAllItemsData(axiosPrivate),
+    queryFn: () => FetchAllItemsData(),
   });
 
   if (isLoading) return <Spinner />;

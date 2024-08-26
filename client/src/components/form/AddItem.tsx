@@ -35,12 +35,13 @@ function AddItem({ isOpen, setIsOpen }: LoginProps) {
 
   const { refetch } = useQuery({
     queryKey: ["AllItemsData"],
-    queryFn: () => FetchAllItemsData(axiosPrivate),
+    queryFn: () => FetchAllItemsData(),
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     const finalData = {
       ...data,
+      isAvailable: data.isAvailable || false, // Ensuring it is boolean
       userId: auth.userId,
     };
     try {
@@ -57,6 +58,7 @@ function AddItem({ isOpen, setIsOpen }: LoginProps) {
       console.log(error);
     }
   };
+
   return isOpen ? (
     <div
       onClick={() => setIsOpen(false)}
