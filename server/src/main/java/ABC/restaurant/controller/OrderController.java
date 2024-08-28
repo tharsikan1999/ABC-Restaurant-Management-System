@@ -2,14 +2,12 @@ package ABC.restaurant.controller;
 
 import ABC.restaurant.Response.RegisterResponse;
 import ABC.restaurant.dto.OrderDto;
-import ABC.restaurant.entity.ItemEntity;
 import ABC.restaurant.entity.OrderEntity;
 import ABC.restaurant.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

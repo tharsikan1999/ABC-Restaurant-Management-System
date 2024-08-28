@@ -5,7 +5,7 @@ import Contact from "../contact";
 import PizzaImg from "../../../public/Images/pizzaImg.jpg";
 import { useNavigate } from "react-router-dom";
 import OrderItem from "../../components/form/OrderItem";
-import UseAuthProvider from "../../Hooks//UseAuthProvider";
+import UseAuthProvider from "../../Hooks/UseAuthProvider";
 import Cookies from "universal-cookie";
 import { useLogoutMutation } from "../../query/common/query";
 import Spinner from "../../animation/Spinner";
@@ -18,11 +18,12 @@ interface Pizza {
   price: number;
   image: string;
 }
+
 interface Item {
   id: number;
   name: string;
   price: number;
-  image: string;
+  image?: string;
 }
 
 const HomePge = () => {
@@ -41,7 +42,13 @@ const HomePge = () => {
     error,
   } = useQuery({
     queryKey: ["AllItemsData"],
-    queryFn: () => FetchAllItemsData(),
+    queryFn: async () => {
+      const items = await FetchAllItemsData();
+      return items.map((item) => ({
+        ...item,
+        id: Number(item.id),
+      }));
+    },
   });
 
   const { mutateAsync: logout } = useLogoutMutation();
@@ -57,10 +64,10 @@ const HomePge = () => {
     }
   };
 
-  const handleOrder = (pizza: Item) => {
+  const handleOrder = (item: Item) => {
     if (auth.accessToken) {
       setIsOrderOpen(true);
-      setPizza(pizza as Pizza);
+      setPizza(item as Pizza);
     } else {
       setIsOpen(true);
     }
@@ -100,35 +107,33 @@ const HomePge = () => {
           </div>
         </div>
         <div className=" grid  grid-cols-5 pt-10 gap-x-6 gap-y-8 z-10">
-          {AllItemsData?.map(
-            (pizza, index) => (
-              console.log(pizza),
-              (
-                <div key={index} className="">
-                  <div
-                    className="w-full rounded-md h-52 bg-cover bg-center bg-no-repeat"
-                    style={{
-                      backgroundImage: `url(${PizzaImg})`,
-                    }}
-                  />
-                  <div className="w-full flex justify-between py-3 px-1">
-                    <p className="font-semibold text-lg text-slate-800/90">
-                      {pizza.name}
-                    </p>
-                    <p className="font-semibold text-lg text-slate-600/90">
-                      RS. {pizza.price}
-                    </p>
-                  </div>
-                  <div className="w-full flex justify-center mt-1">
-                    <Button
-                      text="Order Now"
-                      onClick={() => handleOrder(pizza)}
-                    />
-                  </div>
-                </div>
-              )
-            )
-          )}
+          {AllItemsData?.map((pizza, index) => (
+            <div key={index} className="">
+              <div
+                className="w-full rounded-md h-52 bg-cover bg-center bg-no-repeat "
+                style={{
+                  backgroundImage: `url(${PizzaImg})`,
+                }}
+              />
+              <div className="w-full flex justify-between py-3 px-1">
+                <p className="font-semibold text-lg text-slate-800/90">
+                  {pizza.name}
+                </p>
+                <p className="font-semibold text-lg text-slate-600/90">
+                  RS. {pizza.price}
+                </p>
+              </div>
+              <button
+                className="w-full flex justify-center mt-1"
+                disabled={pizza.isAvailable ? false : true}
+              >
+                <Button
+                  text={`${pizza.isAvailable ? "Order Now" : "Not Available"}`}
+                  onClick={() => handleOrder(pizza)}
+                />
+              </button>
+            </div>
+          ))}
         </div>
       </div>
     </div>

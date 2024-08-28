@@ -41,8 +41,8 @@ function OrderItem({ isOpen, setIsOpen, pizza }: OrderItemProps) {
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     const finalData = {
-      userId: auth.userId,
-      itemId: pizza?.id ?? 0,
+      userId: auth.userId.toString(),
+      itemId: pizza?.id.toString() ?? "0",
       address: data.address,
     };
     try {

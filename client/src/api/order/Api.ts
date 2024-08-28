@@ -21,8 +21,14 @@ interface Order {
   user: User;
 }
 
+interface userOrder {
+  userId: string;
+  itemId: string;
+  address: string;
+}
+
 interface OrderItemProps {
-  order: Order;
+  order: userOrder;
   axiosPrivate: AxiosInstance;
   reset: () => void;
   setIsOpen: (isOpen: boolean) => void;
