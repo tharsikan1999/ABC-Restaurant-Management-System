@@ -16,6 +16,7 @@ type Item = {
   price: number;
   isAvailable: boolean;
   user?: User;
+  itemImg?: string | File;
 };
 
 interface AddItemProps {

@@ -5,11 +5,14 @@ import axios from "axios";
 import Button from ".././common/Button";
 import { Fade } from "react-awesome-reveal";
 import { AddItemSchema } from "../../validation/AddItemSchema";
+import { ImageSchema } from "../../validation/ImageSchema";
 import useAxiosPrivate from "../../Hooks/UseAxiosPrivate";
 import { useAddItemMutation } from "../../query/item/query";
 import UseAuthProvider from "../../Hooks/UseAuthProvider";
 import { FetchAllItemsData } from "../../api/item/Api";
 import { useQuery } from "@tanstack/react-query";
+
+import { useState } from "react";
 
 type FormFields = z.infer<typeof AddItemSchema>;
 
@@ -19,9 +22,12 @@ interface LoginProps {
 }
 
 function AddItem({ isOpen, setIsOpen }: LoginProps) {
+  axios.defaults.withCredentials = true;
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const { mutateAsync: addItem } = useAddItemMutation();
   const { auth } = UseAuthProvider();
-  axios.defaults.withCredentials = true;
   const axiosPrivate = useAxiosPrivate();
 
   const {
@@ -39,11 +45,18 @@ function AddItem({ isOpen, setIsOpen }: LoginProps) {
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    if (!selectedImage) {
+      setError("Please select an image to upload");
+      return;
+    }
+
     const finalData = {
       ...data,
-      isAvailable: data.isAvailable || false, // Ensuring it is boolean
+      isAvailable: data.isAvailable ? data.isAvailable === "true" : false,
       userId: auth.userId,
+      itemImg: selectedImage,
     };
+    console.log(finalData);
     try {
       await addItem({
         item: finalData,
@@ -56,6 +69,23 @@ function AddItem({ isOpen, setIsOpen }: LoginProps) {
       });
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files ? event.target.files[0] : null;
+    if (!file) return;
+
+    const result = ImageSchema.pick({ file: true }).safeParse({ file });
+
+    if (!result.success) {
+      setError(result.error.errors[0].message);
+      setSelectedImage(null);
+      setImagePreview(null);
+    } else {
+      setError(null);
+      setSelectedImage(file);
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -144,22 +174,80 @@ function AddItem({ isOpen, setIsOpen }: LoginProps) {
 
                 <Fade direction="up" triggerOnce>
                   <div className="flex items-center">
-                    <input
+                    <select
                       {...register("isAvailable")}
-                      type="checkbox"
                       name="isAvailable"
-                      id="isAvailable"
-                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                    <label
-                      htmlFor="isAvailable"
-                      className="ml-2 text-sm font-medium text-gray-200 dark:text-gray-300"
+                      id="availability"
+                      className="w-full h-10 text-gray-400 bg-gray-100 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-200 border-gray-300 rounded outline-none border-none px-3"
                     >
-                      Is Available
-                    </label>
+                      <option value="">Select Availability</option>
+                      <option value="true">Available</option>
+                      <option value="false">Not Available</option>
+                    </select>
+                  </div>
+                  {errors.isAvailable && (
+                    <div className="text-red-500 mt-2 mb-5">
+                      {errors.isAvailable.message}
+                    </div>
+                  )}
+                </Fade>
+                <Fade direction="up" triggerOnce>
+                  <div className="flex flex-col items-center justify-center w-full rounded-lg p-8">
+                    <div className="relative flex flex-col items-center justify-center w-32 h-32 mb-4">
+                      {imagePreview ? (
+                        <img
+                          src={imagePreview}
+                          alt="Item Preview"
+                          className="rounded-lg w-32 h-32 object-cover"
+                        />
+                      ) : (
+                        <img
+                          src="/icons/cloud-computing.png"
+                          alt="Avatar"
+                          className="rounded-md w-32 h-32 object-cover"
+                        />
+                      )}
+                      <label
+                        htmlFor="dropzone-file"
+                        className="absolute bottom-0 right-0 bg-blue-500 p-2 rounded-full shadow-md cursor-pointer text-white hover:bg-blue-600"
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 4v16m8-8H4"
+                          />
+                        </svg>
+                      </label>
+                      <input
+                        id="dropzone-file"
+                        type="file"
+                        className="hidden"
+                        accept="image/png, image/jpeg, image/jpg"
+                        onChange={handleImageChange}
+                      />
+                    </div>
+                    <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                      <span className="font-semibold">Click to upload</span> or
+                      drag and drop
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      SVG, PNG, JPG (MAX. 800x800px)
+                    </p>
                   </div>
                 </Fade>
-
+                {error && (
+                  <p className="text-red-500 text-[0.875rem] text-center font-semibold mt-[0.625rem]">
+                    {error}
+                  </p>
+                )}
                 <div className=" w-full flex justify-center">
                   <Button
                     text="Add Item"

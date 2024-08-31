@@ -9,5 +9,5 @@ export const AddItemSchema = z.object({
     })
     .transform((val) => Number(val))
     .refine((val) => val > 0, { message: "Price is required" }),
-  isAvailable: z.boolean().optional(),
+  isAvailable: z.string().min(1, { message: "Availability is required" }),
 });
