@@ -38,23 +38,30 @@ export const AddItem = async ({
   refetch,
 }: AddItemProps): Promise<void> => {
   try {
+    console.log(item);
+    // Create a new FormData object
     const formData = new FormData();
 
+    // Append the item as a JSON string
     formData.append("item", JSON.stringify(item));
 
+    // Append the image file
     formData.append("image", image);
 
+    // Send the POST request with formData
     await axiosPrivate.post(`${CommonBase_API_URL}/addItem`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
 
+    // Handle success
     toast.success("Item added successfully");
     reset();
     setIsOpen(false);
     refetch();
   } catch (error) {
+    // Handle error
     if (axios.isAxiosError(error) && error.response) {
       if (
         error.response.status === 409 &&
