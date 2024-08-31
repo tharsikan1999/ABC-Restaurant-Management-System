@@ -78,7 +78,7 @@ const HomePge = () => {
   if (isError) return `Error: ${error.message}`;
 
   return (
-    <div className="w-full min-h-screen relative">
+    <div className="w-full min-h-screen relative  pb-20">
       {auth.accessToken ? null : (
         <AuthModal isOpen={isOpen} setIsOpen={setIsOpen} />
       )}
@@ -106,35 +106,43 @@ const HomePge = () => {
             ) : null}
           </div>
         </div>
-        <div className=" grid  grid-cols-5 pt-10 gap-x-6 gap-y-8 z-10">
-          {AllItemsData?.map((pizza, index) => (
-            <div key={index} className="">
-              <div
-                className="w-full rounded-md h-52 bg-cover bg-center bg-no-repeat "
-                style={{
-                  backgroundImage: `url(${pizza.imagePath || PizzaImg})`,
-                }}
-              />
-              <div className="w-full flex justify-between py-3 px-1">
-                <p className="font-semibold text-lg text-slate-800/90">
-                  {pizza.name}
-                </p>
-                <p className="font-semibold text-lg text-slate-600/90">
-                  RS. {pizza.price}
-                </p>
-              </div>
-              <button
-                className="w-full flex justify-center mt-1"
-                disabled={pizza.isAvailable ? false : true}
-              >
-                <Button
-                  text={`${pizza.isAvailable ? "Order Now" : "Not Available"}`}
-                  onClick={() => handleOrder(pizza)}
+        {AllItemsData?.length === 0 ? (
+          <p className="text-center text-xl font-semibold mt-10 text-slate-800/90">
+            No data available
+          </p>
+        ) : (
+          <div className=" grid  grid-cols-5 pt-10 gap-x-6 gap-y-14 z-10">
+            {AllItemsData?.map((pizza, index) => (
+              <div key={index} className="">
+                <div
+                  className="w-full rounded-md h-52 bg-cover bg-center bg-no-repeat "
+                  style={{
+                    backgroundImage: `url(${pizza.imagePath || PizzaImg})`,
+                  }}
                 />
-              </button>
-            </div>
-          ))}
-        </div>
+                <div className="w-full flex justify-between py-3 px-1">
+                  <p className="font-semibold text-lg text-slate-800/90">
+                    {pizza.name}
+                  </p>
+                  <p className="font-semibold text-lg text-slate-600/90">
+                    RS. {pizza.price}
+                  </p>
+                </div>
+                <button
+                  className="w-full flex justify-center mt-1"
+                  disabled={pizza.isAvailable ? false : true}
+                >
+                  <Button
+                    text={`${
+                      pizza.isAvailable ? "Order Now" : "Not Available"
+                    }`}
+                    onClick={() => handleOrder(pizza)}
+                  />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -12,4 +12,6 @@ public interface OrderService {
     RegisterResponse placeOrder(@Valid OrderDto orderDto);
 
     List<OrderEntity> getAllOrders();
+
+    List<OrderEntity> findByUserId(long userId);
 }

@@ -1,24 +1,34 @@
 import useAxiosPrivate from "../../Hooks/UseAxiosPrivate";
 import Spinner from "../../animation/Spinner";
 import { useQuery } from "@tanstack/react-query";
-import { FetchAllOrderItemData } from "../../api/order/Api";
+import {
+  FetchAllOrderByUserId,
+  FetchAllOrderItemData,
+} from "../../api/order/Api";
+import UseAuthProvider from "../../Hooks/UseAuthProvider";
 
 const OrderTable = () => {
   const axiosPrivate = useAxiosPrivate();
+  const { auth } = UseAuthProvider();
+
+  const isUser = auth.role === "USER";
 
   const {
-    isLoading,
-    isError,
-    data: AllOrdersData,
-    error,
+    isLoading: isOrdersLoading,
+    isError: isOrdersError,
+    data: ordersData,
+    error: ordersError,
   } = useQuery({
-    queryKey: ["AllOrdersData"],
-    queryFn: () => FetchAllOrderItemData(axiosPrivate),
+    queryKey: ["OrdersData", auth.role],
+    queryFn: () =>
+      isUser
+        ? FetchAllOrderByUserId(axiosPrivate, auth.userDbId)
+        : FetchAllOrderItemData(axiosPrivate),
+    enabled: !!auth.role,
   });
 
-  if (isLoading) return <Spinner />;
-
-  if (isError) return `Error: ${error.message}`;
+  if (isOrdersLoading) return <Spinner />;
+  if (isOrdersError) return `Error: ${ordersError.message}`;
   return (
     <div className="">
       <p className=" font-bold text-2xl text-slate-600/70 text-center mb-5 mt-10">
@@ -55,14 +65,14 @@ const OrderTable = () => {
             </tr>
           </thead>
           <tbody>
-            {AllOrdersData?.length === 0 ? (
+            {ordersData?.length === 0 ? (
               <tr>
                 <td colSpan={9} className="text-center py-4">
                   No data found
                 </td>
               </tr>
             ) : (
-              AllOrdersData?.map((item, index: number) => (
+              ordersData?.map((item, index: number) => (
                 <tr
                   key={index}
                   className={`dark:bg-[#1E2021] whitespace-nowrap dark:text-gray-400  dark:hover:text-gray-800 hover:bg-gradient-to-r hover:from-blue-300 hover:via-blue-200 cursor-pointer hover:to-blue-300  hover:dark:bg-gradient-to-r hover:dark:from-gray-100 hover:dark:via-white hover:dark:to-gray-100 hover:dark:cursor-pointer transition-colors duration-200 text-[0.9rem] font-normal text-customGreen ${

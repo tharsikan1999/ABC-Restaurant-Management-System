@@ -46,6 +46,7 @@ function Login({ toggleMode, setIsOpen }: LoginProps) {
         const accessToken = response.data.accessToken;
 
         const decodeJwt = decodeToken(accessToken);
+        console.log(decodeJwt);
 
         setAuth({
           role: decodeJwt.role,
@@ -54,6 +55,7 @@ function Login({ toggleMode, setIsOpen }: LoginProps) {
           email: decodeJwt.email,
           userName: decodeJwt.name,
           phone: decodeJwt.phone,
+          userDbId: decodeJwt.id,
         });
 
         setCurrentUser({

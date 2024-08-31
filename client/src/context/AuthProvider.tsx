@@ -7,6 +7,7 @@ interface AuthState {
   userName: string;
   email: string;
   phone?: string;
+  userDbId: number;
 }
 
 interface AuthContextType {
@@ -28,6 +29,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     userName: "",
     email: "",
     phone: "",
+    userDbId: 0,
   });
 
   return (
