@@ -64,9 +64,7 @@ function AddItem({ isOpen, setIsOpen }: LoginProps) {
       ...data,
       isAvailable: data.isAvailable ? data.isAvailable === "true" : false,
       userId: auth.userId,
-      itemImg: selectedImage,
     };
-    console.log(finalData);
     try {
       await addItem({
         item: finalData,

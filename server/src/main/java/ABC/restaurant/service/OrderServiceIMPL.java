@@ -45,4 +45,10 @@ public class OrderServiceIMPL implements OrderService{
     public List<OrderEntity> getAllOrders() {
         return orderRepo.findAll();
     }
+
+    @Override
+    public List<OrderEntity> findByUserId(long userId) {
+        return orderRepo.findByUserId(userId);
+    }
+
 }

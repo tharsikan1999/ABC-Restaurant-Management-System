@@ -32,6 +32,7 @@ const PublicRoute: React.FC<PublicRouteProps> = ({ element }) => {
         userId: decodeJwt.id,
         email: decodeJwt.email,
         phone: decodeJwt.phone,
+        userDbId: decodeJwt.id,
       });
     } else {
       setAuth({

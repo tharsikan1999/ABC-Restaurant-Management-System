@@ -50,5 +50,11 @@ public class ItemController {
         return itemService.getAllItems();
     }
 
+    @GetMapping("/getItemsByUserId/{userId}")
+    @PreAuthorize("hasAnyAuthority('USER' )")
+    public List<ItemEntity> getItemsByUserId(@PathVariable long userId) {
+        return itemService.findByUserId(userId);
+    }
+
 
 }

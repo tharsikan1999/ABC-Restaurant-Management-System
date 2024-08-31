@@ -36,6 +36,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
         userId: decodeJwt.id,
         email: decodeJwt.email,
         phone: decodeJwt.phone,
+        userDbId: decodeJwt.id,
       });
       setIsAuthenticated(true);
     } else {

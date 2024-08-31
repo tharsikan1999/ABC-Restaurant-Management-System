@@ -60,5 +60,10 @@ public class ItemServiceIMPL implements  ItemService{
         return relativePath;
     }
 
+    @Override
+    public List<ItemEntity> findByUserId(long userId) {
+        return itemRepo.findByUserId(userId);
+    }
+
 
 }

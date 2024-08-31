@@ -15,4 +15,6 @@ public interface ItemService {
     List<ItemEntity> getAllItems();
 
     String uploadImage(MultipartFile file) throws IOException;
+
+    List<ItemEntity> findByUserId(long userId);
 }

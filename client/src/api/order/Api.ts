@@ -68,3 +68,22 @@ export const FetchAllOrderItemData = async (
     throw new Error("Failed to get data");
   }
 };
+
+export const FetchAllOrderByUserId = async (
+  axiosPrivate: AxiosInstance,
+  userId: number
+): Promise<Order[]> => {
+  try {
+    const res = await axiosPrivate.get(
+      `${CommonBase_API_URL}/getOrdersByUserId/${userId}`
+    );
+    return res.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error fetching get All Orders:", error.message);
+    } else {
+      console.error("Error fetching get All Orders:", error);
+    }
+    throw new Error("Failed to get data");
+  }
+};
