@@ -68,7 +68,7 @@ const ItemsTable = () => {
                     <td className="px-6 py-4">{index + 1}</td>
                     <td className="px-6 py-4">
                       <img
-                        src={PizzaImg}
+                        src={item.imagePath || PizzaImg}
                         alt={item.name}
                         width={50}
                         height={50}

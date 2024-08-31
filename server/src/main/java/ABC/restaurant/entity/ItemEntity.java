@@ -26,6 +26,10 @@ public class ItemEntity {
     @NotBlank(message = "Price cannot be null or empty")
     private String price;
 
+    @Column(name = "imagePath", nullable = false)
+    @NotBlank(message = "Image path cannot be null or empty")
+    private String  imagePath;
+
     @Column(name = "isAvailable", nullable = false)
     private Boolean isAvailable;
 

@@ -17,26 +17,39 @@ type Item = {
   isAvailable: boolean;
   user?: User;
   itemImg?: string | File;
+  imagePath?: string;
 };
 
 interface AddItemProps {
   item: Item;
+  image: File;
   axiosPrivate: AxiosInstance;
   reset: () => void;
   setIsOpen: (isOpen: boolean) => void;
   refetch: () => void;
 }
 
-//add a Item
 export const AddItem = async ({
   item,
+  image,
   axiosPrivate,
   reset,
   setIsOpen,
   refetch,
 }: AddItemProps): Promise<void> => {
   try {
-    await axiosPrivate.post(`${CommonBase_API_URL}/addItem`, item);
+    const formData = new FormData();
+
+    formData.append("item", JSON.stringify(item));
+
+    formData.append("image", image);
+
+    await axiosPrivate.post(`${CommonBase_API_URL}/addItem`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
     toast.success("Item added successfully");
     reset();
     setIsOpen(false);

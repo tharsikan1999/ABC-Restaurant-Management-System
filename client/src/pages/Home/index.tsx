@@ -2,7 +2,6 @@ import { useState } from "react";
 import Button from "../../components/common/Button";
 import AuthModal from "../AuthModal";
 import Contact from "../contact";
-import PizzaImg from "../../../public/Images/pizzaImg.jpg";
 import { useNavigate } from "react-router-dom";
 import OrderItem from "../../components/form/OrderItem";
 import UseAuthProvider from "../../Hooks/UseAuthProvider";
@@ -11,6 +10,7 @@ import { useLogoutMutation } from "../../query/common/query";
 import Spinner from "../../animation/Spinner";
 import { FetchAllItemsData } from "../../api/item/Api";
 import { useQuery } from "@tanstack/react-query";
+import PizzaImg from "../../../public/Images/pizzaImg.jpg";
 
 interface Pizza {
   id: number;
@@ -112,7 +112,7 @@ const HomePge = () => {
               <div
                 className="w-full rounded-md h-52 bg-cover bg-center bg-no-repeat "
                 style={{
-                  backgroundImage: `url(${PizzaImg})`,
+                  backgroundImage: `url(${pizza.imagePath || PizzaImg})`,
                 }}
               />
               <div className="w-full flex justify-between py-3 px-1">

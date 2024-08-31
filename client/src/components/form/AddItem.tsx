@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 type FormFields = z.infer<typeof AddItemSchema>;
+type ImgFormFields = z.infer<typeof ImageSchema>;
 
 interface LoginProps {
   isOpen: boolean;
@@ -34,15 +35,24 @@ function AddItem({ isOpen, setIsOpen }: LoginProps) {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
+    reset: resetFormFields,
   } = useForm<FormFields>({
     resolver: zodResolver(AddItemSchema),
+  });
+
+  const { reset: resetImageFields } = useForm<ImgFormFields>({
+    resolver: zodResolver(ImageSchema),
   });
 
   const { refetch } = useQuery({
     queryKey: ["AllItemsData"],
     queryFn: () => FetchAllItemsData(),
   });
+
+  const resetImageState = () => {
+    setSelectedImage(null);
+    setImagePreview(null);
+  };
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     if (!selectedImage) {
@@ -60,9 +70,12 @@ function AddItem({ isOpen, setIsOpen }: LoginProps) {
     try {
       await addItem({
         item: finalData,
+        image: selectedImage,
         axiosPrivate,
         reset: () => {
-          reset();
+          resetImageFields();
+          resetFormFields();
+          resetImageState();
         },
         setIsOpen,
         refetch,
